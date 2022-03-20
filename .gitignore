@@ -82,3 +82,5 @@ nbdist/
 *.iws
 *.iml
 out
+src/test
+src/tests/SeedTest.java

@@ -51,5 +51,6 @@ public class Session {
             }
             satisfied = create.apply(input);
         }
+        System.out.println(this.player.getName());
     }
 }

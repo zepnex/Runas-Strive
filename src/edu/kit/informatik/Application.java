@@ -12,8 +12,13 @@ public final class Application {
 
 
     public static void main(String[] args) {
-        Session session = new Session();
-        session.start();
+        if (args.length > 0) {
+            throw new IllegalArgumentException("Error: can't handle any arguments");
+        } else {
+            Session session = new Session();
+            session.start();
+        }
+
     }
 
 
