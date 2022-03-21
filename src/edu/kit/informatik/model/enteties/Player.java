@@ -29,4 +29,8 @@ public class Player {
     public void setAbilityLevel(int abilityLevel) {
         this.abilityLevel = abilityLevel;
     }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
 }

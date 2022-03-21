@@ -34,7 +34,7 @@ public class PlayerCreation extends Choosable {
 
             builder.append(String.format("%d) %s \n", i + 1, answer.charAt(0) + answer.substring(1).toLowerCase()));
         }
-        System.out.println(builder.substring(0,builder.length() - 2));
+        System.out.println(builder.substring(0, builder.length() - 2));
     }
 
     @Override
@@ -44,7 +44,10 @@ public class PlayerCreation extends Choosable {
 
     @Override
     public void execute(String input) {
-        session.setPlayer(new Player(PlayerClass.getCharacter(Integer.parseInt(input))));
+        PlayerClass playerClass = PlayerClass.getCharacter(Integer.parseInt(input));
+        Player player = new Player(playerClass);
+        player.setCards(PlayerClass.getCards(playerClass, player));
+        session.setPlayer(player);
     }
 
     @Override
