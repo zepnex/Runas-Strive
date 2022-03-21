@@ -20,7 +20,6 @@ public class Session {
         while (this.running) {
             if (this.player == null) {
                 createPlayer();
-
             } else if (game == null) {
                 game = new RunasStrive(this, this.player, this.scanner);
                 game.start();
@@ -51,6 +50,5 @@ public class Session {
             }
             satisfied = create.apply(input);
         }
-        System.out.println(this.player.getName());
     }
 }

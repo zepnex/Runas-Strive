@@ -2,9 +2,8 @@ package edu.kit.informatik.controller;
 
 import edu.kit.informatik.controller.commands.actions.ShuffleCards;
 import edu.kit.informatik.controller.commands.levels.Level;
-import edu.kit.informatik.controller.commands.levels.Level1;
-import edu.kit.informatik.controller.commands.levels.Level2;
 import edu.kit.informatik.model.abilities.Card;
+import edu.kit.informatik.model.abilities.Focus;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Fire;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Ice;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Lightning;
@@ -22,7 +21,6 @@ import edu.kit.informatik.model.enteties.monster.Frog;
 import edu.kit.informatik.model.enteties.monster.Ghost;
 import edu.kit.informatik.model.enteties.monster.Goblin;
 import edu.kit.informatik.model.enteties.monster.Hornet;
-import edu.kit.informatik.model.enteties.monster.MegaSaurus;
 import edu.kit.informatik.model.enteties.monster.Mushroomlin;
 import edu.kit.informatik.model.enteties.monster.Mushroomlon;
 import edu.kit.informatik.model.enteties.monster.Rat;
@@ -30,80 +28,80 @@ import edu.kit.informatik.model.enteties.monster.ShadowBlade;
 import edu.kit.informatik.model.enteties.monster.Skeleton;
 import edu.kit.informatik.model.enteties.monster.Snake;
 import edu.kit.informatik.model.enteties.monster.Spider;
-import edu.kit.informatik.model.enteties.monster.SpiderKing;
 import edu.kit.informatik.model.enteties.monster.Tarantula;
 import edu.kit.informatik.model.enteties.monster.WildBoar;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 
 public class RunasStrive {
-    private Session session;
+    private final Session session;
     private final Player player;
     private final Scanner scanner;
     private int level;
     private List<Card> playerCards;
-    private List<Monster> monsterLevel1;
-    List<Monster> monsterLevel2;
-    Level currentLevel;
+    Queue<List<Monster>> monster;
 
 
     public RunasStrive(Session session, Player player, Scanner scanner) {
         this.session = session;
         this.player = player;
         this.scanner = scanner;
-        loadLevel(level);
+        initCards();
     }
 
 
     public void start() {
         // shuffle card
         this.level = 1;
-        ShuffleCards shuffel = new ShuffleCards(this);
+        ShuffleCards shuffle = new ShuffleCards(this);
         boolean satisfied = false;
-        shuffel.printQuestion();
+        shuffle.printQuestion();
         while (!satisfied) {
-            shuffel.printAnswer();
-            satisfied = shuffel.apply(scanner.nextLine());
+            shuffle.printAnswer();
+            String input = this.scanner.nextLine();
+            if (input.equals("quit")) {
+                this.session.stop();
+                return;
+            }
+            satisfied = shuffle.apply(input);
         }
-        loadLevel(level);
+        loadLevel();
     }
 
-    public void loadLevel(int level) {
-        if (level == 1) {
-            currentLevel = new Level1(this, this.player, this.playerCards, this.monsterLevel1);
-        } else if (level == 2) {
-            currentLevel = new Level2(this, this.player, this.playerCards, this.monsterLevel2);
-        } else {
-            //Game is finished
-        }
-
+    public void loadLevel() {
+        new Level(this.player, this.monster.poll());
+        session.stop();
     }
 
-    public void initCards(Queue<Integer> seeds) {
+    public void shuffle(int seedPlayer, int seedMonster) {
+        Collections.shuffle(this.playerCards, new Random(seedPlayer));
+        Collections.shuffle(this.monster.element(), new Random(seedMonster));
+    }
+
+    public void initCards() {
         this.playerCards = new ArrayList<>(List.of(
             new Fire(player.getAbilityLevel()), new Ice(player.getAbilityLevel()),
             new Lightning(player.getAbilityLevel()), new Reflect(player.getAbilityLevel()),
             new Water(player.getAbilityLevel()), new Parry(player.getAbilityLevel()),
             new Slash(player.getAbilityLevel()), new Swing(player.getAbilityLevel()),
-            new Thrust(player.getAbilityLevel())));
-        Collections.shuffle(this.playerCards, new Random(seeds.peek()));
-        if (level == 1) {
-            this.monsterLevel1 =
-                new ArrayList<>(
-                    List.of(new SpiderKing(), new Frog(), new Ghost(), new Skeleton(), new Spider(), new Goblin(),
-                        new Rat(), new Mushroomlin()));
-            Collections.shuffle(this.monsterLevel1, new Random(seeds.peek()));
-        } else {
-            this.monsterLevel2 = new ArrayList<>(
-                List.of(new MegaSaurus(), new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(),
-                    new Tarantula(), new Bear(), new Mushroomlon(), new WildBoar()));
-            Collections.shuffle(monsterLevel2, new Random(seeds.peek()));
-        }
+            new Thrust(player.getAbilityLevel()), new Focus(player.getAbilityLevel())));
+        this.playerCards.removeAll(this.player.getCards());
+
+        this.monster = new LinkedList<>() {{
+            add(new ArrayList<>(
+                List.of(new Frog(), new Ghost(), new Skeleton(), new Spider(), new Goblin(), new Rat(),
+                    new Mushroomlin())) {
+            });
+            add(new ArrayList<>(
+                List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(),
+                    new Mushroomlon(), new WildBoar())));
+        }};
     }
 
     public int getLevel() {

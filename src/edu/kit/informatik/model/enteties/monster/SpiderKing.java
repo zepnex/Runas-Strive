@@ -11,9 +11,13 @@ import edu.kit.informatik.model.enteties.MonsterType;
 import java.util.List;
 
 public class SpiderKing extends Monster {
-    private static final int HP = 50;
+    private static final int MAX_HP = 50;
     private static final boolean BOSS = true;
     private static final MonsterType TYPE = MonsterType.LIGHTNING;
     private final static List ABILYTIES = List.of(new Bite(1), new Block(1), new Focus(1), new Lightning(1));
 
+    @Override
+    protected int getMaxHp() {
+        return MAX_HP;
+    }
 }

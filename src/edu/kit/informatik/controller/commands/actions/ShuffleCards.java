@@ -32,11 +32,8 @@ public class ShuffleCards extends Choosable {
 
     @Override
     public void execute(String input) {
-        Queue<Integer> seeds = new LinkedList<>();
-        for (String seed : input.split(",")) {
-            seeds.add(Integer.parseInt(seed));
-        }
-        game.initCards(seeds);
+        String[] seeds = input.split(",");
+        game.shuffle(Integer.parseInt(seeds[0]), Integer.parseInt(seeds[1]));
     }
 
     @Override

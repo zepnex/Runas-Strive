@@ -4,8 +4,6 @@ import edu.kit.informatik.controller.commands.Choosable;
 import edu.kit.informatik.model.abilities.Card;
 
 import java.util.List;
-import java.util.Optional;
-
 public class ChooseCard extends Choosable {
     private static final String QUESTION = "Select card to play";
     private final List<Card> answers;

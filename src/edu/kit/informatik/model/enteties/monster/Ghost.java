@@ -8,8 +8,13 @@ import edu.kit.informatik.model.enteties.MonsterType;
 import java.util.List;
 
 public class Ghost extends Monster {
-    private static final int HP = 15;
+    private static final int MAX_HP = 15;
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.ICE;
     private final static List ABILYTIES = List.of(new Focus(1), new Ice(1));
+
+    @Override
+    protected int getMaxHp() {
+        return MAX_HP;
+    }
 }

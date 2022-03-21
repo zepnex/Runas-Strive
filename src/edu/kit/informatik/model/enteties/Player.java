@@ -5,10 +5,12 @@ import edu.kit.informatik.model.abilities.Card;
 
 import java.util.List;
 
-public class Player {
+public class Player extends Entity {
+    private static final int MAX_HP = 50;
     private final PlayerClass characterClass;
     private List<Card> cards;
     private int abilityLevel;
+
 
 
     public Player(PlayerClass characterClass) {
@@ -32,5 +34,14 @@ public class Player {
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    @Override
+    protected int getMaxHp() {
+        return MAX_HP;
     }
 }
