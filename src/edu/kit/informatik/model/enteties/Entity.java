@@ -1,13 +1,15 @@
 package edu.kit.informatik.model.enteties;
 
-import edu.kit.informatik.model.abilities.Card;
-
-import java.util.List;
-
 public abstract class Entity {
     private int hp;
     private int focusPoints;
-    private List<Card> abilitys;
+
+
+    public Entity() {
+        hp = getMaxHp();
+        this.focusPoints = 1;
+
+    }
 
     public void dealDamage(int amount) {
         hp -= amount;
@@ -17,7 +19,20 @@ public abstract class Entity {
         hp = Math.min(hp + amount, getMaxHp());
     }
 
+    public int getFocusPoints() {
+        return focusPoints;
+    }
 
+    public void increaseFocusPoints() {
+        this.focusPoints += 1;
+    }
 
-    protected abstract int getMaxHp();
+    public int getCurrentHp() {
+        return hp;
+    }
+
+    public abstract String getName();
+
+    public abstract int getMaxHp();
+
 }

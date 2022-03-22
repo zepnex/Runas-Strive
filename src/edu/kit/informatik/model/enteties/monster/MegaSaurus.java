@@ -13,13 +13,20 @@ import java.util.List;
 
 public class MegaSaurus extends Monster {
     private static final int MAX_HP = 100;
+    private static final String NAME = "Mega Saurus";
     private static final boolean BOSS = true;
     private static final MonsterType TYPE = MonsterType.NORMAL;
     private final static List ABILYTIES =
         List.of(new Bite(2), new Block(2), new Focus(2), new Fire(1), new Lightning(1));
 
+
     @Override
-    protected int getMaxHp() {
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public int getMaxHp() {
         return MAX_HP;
     }
 }

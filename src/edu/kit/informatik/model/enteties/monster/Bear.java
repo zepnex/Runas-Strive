@@ -11,12 +11,20 @@ import java.util.List;
 
 public class Bear extends Monster {
     private static final int MAX_HP = 40;
+    private static final String NAME = "Bear";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
     private static final List ABILYTIES = List.of(new Claw(2), new Scratch(2), new Block(2));
 
+
+
     @Override
-    protected int getMaxHp() {
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public int getMaxHp() {
         return MAX_HP;
     }
 }

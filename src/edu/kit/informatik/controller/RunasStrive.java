@@ -42,21 +42,22 @@ import java.util.Scanner;
 public class RunasStrive {
     private final Session session;
     private final Player player;
-    private final Scanner scanner;
+    private Scanner scanner;
     private int level;
     private List<Card> playerCards;
     Queue<List<Monster>> monster;
 
 
-    public RunasStrive(Session session, Player player, Scanner scanner) {
+    public RunasStrive(Session session, Player player) {
         this.session = session;
         this.player = player;
-        this.scanner = scanner;
+
         initCards();
     }
 
 
     public void start() {
+        this.scanner = new Scanner(System.in);
         // shuffle card
         this.level = 1;
         ShuffleCards shuffle = new ShuffleCards(this);
@@ -72,11 +73,14 @@ public class RunasStrive {
             satisfied = shuffle.apply(input);
         }
         loadLevel();
+        this.scanner.close();
     }
 
     public void loadLevel() {
-        new Level(this.player, this.monster.poll());
-        session.stop();
+        while (this.level < 3) {
+            new Level(this.player, this.monster.poll(), level, this);
+            this.level++;
+        }
     }
 
     public void shuffle(int seedPlayer, int seedMonster) {
@@ -110,5 +114,9 @@ public class RunasStrive {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public void quitGame() {
+        this.session.stop();
     }
 }

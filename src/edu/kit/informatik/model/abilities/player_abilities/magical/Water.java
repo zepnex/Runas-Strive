@@ -15,7 +15,7 @@ public class Water extends OffensiveCard {
 
     @Override
     protected int getDamage(int n, int f) {
-        return (2 * n) * f;
+        return (2 * n + 4) * f;
     }
 
     @Override

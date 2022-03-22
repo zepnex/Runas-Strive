@@ -10,12 +10,19 @@ import java.util.List;
 
 public class Rat extends Monster {
     private static final int MAX_HP = 14;
+    private static final String NAME = "Rat";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
     private final static List ABILYTIES = List.of(new Block(1), new Claw(1));
 
+
     @Override
-    protected int getMaxHp() {
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public int getMaxHp() {
         return MAX_HP;
     }
 }

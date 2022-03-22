@@ -10,13 +10,21 @@ import java.util.List;
 
 public class Frog extends Monster {
     private static final int MAX_HP = 16;
+    private static final String NAME = "Frog";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.WATER;
     private final static List ABILYTIES = List.of(new Focus(1), new Water(1));
 
 
+
+
     @Override
-    protected int getMaxHp() {
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public int getMaxHp() {
         return MAX_HP;
     }
 }

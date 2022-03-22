@@ -10,8 +10,7 @@ public class Player extends Entity {
     private final PlayerClass characterClass;
     private List<Card> cards;
     private int abilityLevel;
-
-
+    private Card currentAttackCard;
 
     public Player(PlayerClass characterClass) {
         this.characterClass = characterClass;
@@ -21,7 +20,7 @@ public class Player extends Entity {
     }
 
     public String getName() {
-        return characterClass.name();
+        return this.characterClass.name();
     }
 
     public int getAbilityLevel() {
@@ -41,7 +40,15 @@ public class Player extends Entity {
     }
 
     @Override
-    protected int getMaxHp() {
+    public int getMaxHp() {
         return MAX_HP;
+    }
+
+    public Card getCurrentAttackCard() {
+        return currentAttackCard;
+    }
+
+    public void setCurrentAttackCard(Card currentAttackCard) {
+        this.currentAttackCard = currentAttackCard;
     }
 }

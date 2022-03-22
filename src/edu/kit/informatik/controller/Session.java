@@ -21,10 +21,11 @@ public class Session {
             if (this.player == null) {
                 createPlayer();
             } else if (game == null) {
-                game = new RunasStrive(this, this.player, this.scanner);
+                game = new RunasStrive(this, this.player);
                 game.start();
             }
         }
+        this.scanner.close();
     }
 
 

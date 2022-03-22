@@ -11,12 +11,19 @@ import java.util.List;
 
 public class Snake extends Monster {
     private static final int MAX_HP = 31;
+    private static final String NAME = "Snake";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.ICE;
     private final static List ABILYTIES = List.of(new Bite(2), new Focus(2), new Ice(2));
 
+
     @Override
-    protected int getMaxHp() {
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public int getMaxHp() {
         return MAX_HP;
     }
 }

@@ -10,12 +10,19 @@ import java.util.List;
 
 public class Skeleton extends Monster {
     private static final int MAX_HP = 14;
+    private static final String NAME = "Skeleton";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.LIGHTNING;
     private final static List ABILYTIES = List.of(new Focus(1), new Lightning(1));
 
+
     @Override
-    protected int getMaxHp() {
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public int getMaxHp() {
         return MAX_HP;
     }
 }
