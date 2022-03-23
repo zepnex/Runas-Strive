@@ -14,12 +14,17 @@ public class Pierce extends OffensiveCard {
     }
 
     @Override
-    protected int getDamage(int n, int w) {
+    public int getDamage(int n, int w) {
         return (7 * n + w) + (w > 5 ? 7 * n : 0);
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

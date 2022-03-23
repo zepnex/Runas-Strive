@@ -40,7 +40,7 @@ public class SelectCard extends Choosable {
     public void execute(String input) {
         // TODO: do something with this card
         this.player.setCurrentAttackCard(this.answers.get(Integer.parseInt(input) - 1));
-        System.out.println(this.answers.get(Integer.parseInt(input) - 1).getName());
+        //System.out.printf("%s (%d)",this.answers.get(Integer.parseInt(input) - 1).getName(), this.player.getAbilityLevel());
 
     }
 

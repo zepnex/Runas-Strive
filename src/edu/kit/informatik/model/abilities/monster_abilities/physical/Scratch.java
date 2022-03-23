@@ -14,12 +14,17 @@ public class Scratch extends OffensiveCard {
     //TODO: Bricht Focus
 
     @Override
-    protected int getDamage(int n, int w) {
+    public int getDamage(int n, int w) {
         return 5 * n;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

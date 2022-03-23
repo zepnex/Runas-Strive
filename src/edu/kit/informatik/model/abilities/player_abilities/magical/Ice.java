@@ -14,12 +14,17 @@ public class Ice extends OffensiveCard {
     }
 
     @Override
-    protected int getDamage(int n, int f) {
+    public int getDamage(int n, int f) {
         return (2 * n + 4) * f + 2;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

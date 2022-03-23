@@ -13,12 +13,17 @@ public class Lightning extends OffensiveCard {
 
 
     @Override
-    protected int getDamage(int n, int w) {
+    public int getDamage(int n, int w) {
         return 14 * n + 2;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

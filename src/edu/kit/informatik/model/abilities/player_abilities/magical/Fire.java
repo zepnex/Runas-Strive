@@ -14,12 +14,17 @@ public class Fire extends OffensiveCard {
     }
 
     @Override
-    protected int getDamage(int n, int f) {
+    public int getDamage(int n, int f) {
         return (2 * n + 5) * f;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

@@ -9,7 +9,7 @@ public abstract class OffensiveCard extends Card {
         this.cost = n;
     }
 
-    protected abstract int getDamage(int n, int w);
+    public abstract int getDamage(int n, int w);
 
 
     public int getCost() {

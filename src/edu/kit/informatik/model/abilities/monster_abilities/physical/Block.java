@@ -13,12 +13,17 @@ public class Block extends DefensiveCard {
     }
 
     @Override
-    protected int getDefense(int n) {
+    public int getDefense(int n) {
         return 7 * n;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

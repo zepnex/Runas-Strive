@@ -4,20 +4,19 @@ public enum CardType {
     /**
      *
      */
-    OFFENSIVE("O"),
+    MAGICAL,
     /**
      *
      */
-    DEFENSIVE("D"),
+    PHYSICAL,
     /**
      *
      */
-    NONE("N");
+    NONE;
 
-    private String type;
 
-    private CardType(String type) {
-        this.type = type;
+    private CardType() {
+
     }
 
 }

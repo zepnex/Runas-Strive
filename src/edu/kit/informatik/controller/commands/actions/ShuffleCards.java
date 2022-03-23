@@ -3,12 +3,11 @@ package edu.kit.informatik.controller.commands.actions;
 import edu.kit.informatik.controller.RunasStrive;
 import edu.kit.informatik.controller.commands.Choosable;
 
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class ShuffleCards extends Choosable {
     private static final String QUESTION = "To shuffle ability cards and monster, enter two seeds";
     private static final String ANSWER = "Enter seed [1--2147483647]";
+    private static final String MAX_INT_STR = String.valueOf(Integer.MAX_VALUE);
     RunasStrive game;
 
     public ShuffleCards(RunasStrive game) {
@@ -42,11 +41,12 @@ public class ShuffleCards extends Choosable {
         if (seeds.length != 2) return false;
         boolean correct;
         for (String seed : seeds) {
-            if (seed.length() > 10 || seed.length() < 1) return false;
-            long number = Long.parseLong(seed);
-            correct = number <= Integer.MAX_VALUE && number >= 1;
+            //check if numeric
+            if (!seed.matches("^\\d+$")) return false;
+            correct = seed.compareTo(MAX_INT_STR) <= 0 && seed.compareTo("0") > 0;
             if (!correct) return false;
         }
+
         execute(input);
         return true;
     }

@@ -1,17 +1,19 @@
 package edu.kit.informatik.controller.commands.actions;
 
 import edu.kit.informatik.controller.commands.Choosable;
-import edu.kit.informatik.model.abilities.Card;
+import edu.kit.informatik.controller.commands.levels.Room;
 import edu.kit.informatik.model.enteties.Monster;
 
 import java.util.List;
 
 public class SelectTarget extends Choosable {
     private static final String QUESTION = "Select Runa's Target";
-    List<Monster> answers;
+    private List<Monster> answers;
+    private Room room;
 
-    public SelectTarget(List<Monster> answers) {
+    public SelectTarget(List<Monster> answers, Room room) {
         this.answers = answers;
+        this.room = room;
     }
 
     @Override
@@ -31,16 +33,21 @@ public class SelectTarget extends Choosable {
 
     @Override
     public void printChoices() {
-        System.out.printf("Enter number [1--%s]", this.answers.size());
+        System.out.printf("Enter number [1--%s]\n", this.answers.size());
     }
 
     @Override
     public void execute(String input) {
-        System.out.println("STOP ASIAN HATE");
+        //TODO: do something
+        this.room.setTarget(this.answers.get(Integer.parseInt(input) - 1));
     }
 
     @Override
     public boolean apply(String input) {
+        if(input.matches("[1-2]")){
+            execute(input);
+            return true;
+        }
         return false;
     }
 }

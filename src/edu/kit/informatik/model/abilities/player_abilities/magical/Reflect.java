@@ -14,12 +14,17 @@ public class Reflect extends DefensiveCard {
     }
 
     @Override
-    protected int getDefense(int n) {
+    public int getDefense(int n) {
         return 10 * n;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

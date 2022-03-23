@@ -7,7 +7,7 @@ public abstract class DefensiveCard extends Card {
         super(n);
     }
 
-    protected abstract int getDefense(int n);
+    public abstract int getDefense(int n);
 
 
 }

@@ -78,6 +78,7 @@ public class RunasStrive {
 
     public void loadLevel() {
         while (this.level < 3) {
+            //TODO: shuffle cards
             new Level(this.player, this.monster.poll(), level, this);
             this.level++;
         }

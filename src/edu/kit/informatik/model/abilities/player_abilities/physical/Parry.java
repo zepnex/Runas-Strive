@@ -9,19 +9,24 @@ import edu.kit.informatik.model.abilities.DefensiveCard;
  */
 public class Parry extends DefensiveCard {
     private static final String CARD_NAME = "Parry";
-    private static final CardType TYPE = CardType.DEFENSIVE;
+    private static final CardType TYPE = CardType.;
 
     public Parry(int n) {
         super(n);
     }
 
     @Override
-    protected int getDefense(int n) {
+    public int getDefense(int n) {
         return 7 * n;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

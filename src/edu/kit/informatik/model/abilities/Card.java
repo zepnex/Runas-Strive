@@ -3,6 +3,7 @@ package edu.kit.informatik.model.abilities;
 
 public abstract class Card {
     private int abilityLevel;
+    private CardType type;
 
     public Card(int n) {
         this.abilityLevel = n;
@@ -14,6 +15,11 @@ public abstract class Card {
         return abilityLevel;
     }
 
+    public CardType getType() {
+        return this.getCardType();
+    }
+
+    protected abstract CardType getCardType();
 
     @Override
     public boolean equals(Object o) {

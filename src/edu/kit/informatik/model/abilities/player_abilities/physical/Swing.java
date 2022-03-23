@@ -14,12 +14,17 @@ public class Swing extends OffensiveCard {
 
     //TODO: Bricht irgendwie Fokus
     @Override
-    protected int getDamage(int n, int w) {
+    public int getDamage(int n, int w) {
         return 5 * n + w;
     }
 
     @Override
     public String getName() {
         return CARD_NAME;
+    }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
     }
 }

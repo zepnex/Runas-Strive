@@ -16,7 +16,7 @@ public class Deflect extends DefensiveCard {
     }
 
     @Override
-    protected int getDefense(int n) {
+    public int getDefense(int n) {
         return 11 * n + 2;
     }
 
@@ -24,4 +24,11 @@ public class Deflect extends DefensiveCard {
     public String getName() {
         return CARD_NAME;
     }
+
+    @Override
+    protected CardType getCardType() {
+        return TYPE;
+    }
+
+
 }

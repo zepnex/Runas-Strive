@@ -12,4 +12,11 @@ public class Focus extends Card {
     public String getName() {
         return CARD_NAME;
     }
+
+    @Override
+    protected CardType getCardType() {
+        return null;
+    }
+
+
 }
