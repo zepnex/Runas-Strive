@@ -7,16 +7,17 @@ import java.util.List;
 
 public class Player extends Entity {
     private static final int MAX_HP = 50;
-    private final PlayerClass characterClass;
+    private static final int FOCUS_POINTS = 1;
+    private final CharacterClass characterClass;
     private List<Card> cards;
     private int abilityLevel;
-    private Card currentAttackCard;
+    private Card currentCard;
 
-    public Player(PlayerClass characterClass) {
+    public Player(CharacterClass characterClass) {
+        super(FOCUS_POINTS);
         this.characterClass = characterClass;
-        this.cards = cards;
         this.abilityLevel = 1;
-
+        this.cards = CharacterClass.getCards(characterClass, this);
     }
 
     public String getName() {
@@ -45,10 +46,10 @@ public class Player extends Entity {
     }
 
     public Card getCurrentAttackCard() {
-        return currentAttackCard;
+        return currentCard;
     }
 
     public void setCurrentAttackCard(Card currentAttackCard) {
-        this.currentAttackCard = currentAttackCard;
+        this.currentCard = currentAttackCard;
     }
 }

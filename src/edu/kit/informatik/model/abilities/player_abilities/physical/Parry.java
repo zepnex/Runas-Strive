@@ -9,7 +9,7 @@ import edu.kit.informatik.model.abilities.DefensiveCard;
  */
 public class Parry extends DefensiveCard {
     private static final String CARD_NAME = "Parry";
-    private static final CardType TYPE = CardType.;
+    private static final CardType TYPE = CardType.OFFENSIVE;
 
     public Parry(int n) {
         super(n);

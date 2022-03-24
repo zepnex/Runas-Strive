@@ -1,14 +1,14 @@
 package edu.kit.informatik.controller;
 
-import edu.kit.informatik.controller.commands.actions.PlayerCreation;
+import edu.kit.informatik.controller.commands.action.CharacterClassRequest;
+import edu.kit.informatik.controller.commands.requests.AnswerFlag;
+import edu.kit.informatik.controller.commands.requests.InputRequest;
 import edu.kit.informatik.model.enteties.Player;
 
 import java.util.Scanner;
 
 public class Session {
     private final Scanner scanner;
-    private boolean running;
-    private RunasStrive game;
     private Player player;
 
     public Session() {
@@ -16,40 +16,26 @@ public class Session {
     }
 
     public void start() {
-        this.running = true;
-        while (this.running) {
-            if (this.player == null) {
-                createPlayer();
-            } else if (game == null) {
-                game = new RunasStrive(this, this.player);
-                game.start();
+
+        if (this.player == null) {
+            CharacterClassRequest request = new CharacterClassRequest();
+            requestInput(request);
+            if (!request.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+                this.player = new Player(request.getValue());
+                new RunasStrive(this, this.player).start();
             }
         }
-        this.scanner.close();
     }
 
 
-    public void stop() {
-        this.running = false;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void createPlayer() {
-        PlayerCreation create = new PlayerCreation(this);
-        create.printQuestion();
-        create.printAnswer();
-        boolean satisfied = false;
-        while (!satisfied) {
-            create.printChoices();
-            String input = this.scanner.nextLine();
-            if (input.equals("quit")) {
-                this.stop();
-                break;
+    public void requestInput(InputRequest<?> request) {
+        System.out.println(request.getQuestion());
+        while (request.getAnswerFlag().equals(AnswerFlag.UNUSABLE)) {
+            System.out.println(request.getAnswer());
+            request.process(this.scanner.nextLine());
+            if (request.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+                return;
             }
-            satisfied = create.apply(input);
         }
     }
 }

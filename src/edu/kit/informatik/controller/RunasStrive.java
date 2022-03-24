@@ -1,7 +1,9 @@
 package edu.kit.informatik.controller;
 
-import edu.kit.informatik.controller.commands.actions.ShuffleCards;
+import edu.kit.informatik.controller.commands.action.CharacterClassRequest;
+import edu.kit.informatik.controller.commands.action.ShuffleCardRequest;
 import edu.kit.informatik.controller.commands.levels.Level;
+import edu.kit.informatik.controller.commands.requests.AnswerFlag;
 import edu.kit.informatik.model.abilities.Card;
 import edu.kit.informatik.model.abilities.Focus;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Fire;
@@ -57,29 +59,17 @@ public class RunasStrive {
 
 
     public void start() {
-        this.scanner = new Scanner(System.in);
-        // shuffle card
-        this.level = 1;
-        ShuffleCards shuffle = new ShuffleCards(this);
-        boolean satisfied = false;
-        shuffle.printQuestion();
-        while (!satisfied) {
-            shuffle.printAnswer();
-            String input = this.scanner.nextLine();
-            if (input.equals("quit")) {
-                this.session.stop();
-                return;
-            }
-            satisfied = shuffle.apply(input);
-        }
+        ShuffleCardRequest shuffle = new ShuffleCardRequest();
+        this.session.requestInput(shuffle);
+        if (!shuffle.getAnswerFlag().equals(AnswerFlag.QUIT))
+            shuffle(shuffle.getValue().poll(), shuffle.getValue().poll());
         loadLevel();
-        this.scanner.close();
     }
 
     public void loadLevel() {
         while (this.level < 3) {
             //TODO: shuffle cards
-            new Level(this.player, this.monster.poll(), level, this);
+            new Level(this.player, this.monster.poll(), level, this.session);
             this.level++;
         }
     }
@@ -91,21 +81,21 @@ public class RunasStrive {
 
     public void initCards() {
         this.playerCards = new ArrayList<>(List.of(
-            new Fire(player.getAbilityLevel()), new Ice(player.getAbilityLevel()),
-            new Lightning(player.getAbilityLevel()), new Reflect(player.getAbilityLevel()),
-            new Water(player.getAbilityLevel()), new Parry(player.getAbilityLevel()),
-            new Slash(player.getAbilityLevel()), new Swing(player.getAbilityLevel()),
-            new Thrust(player.getAbilityLevel()), new Focus(player.getAbilityLevel())));
+                new Fire(player.getAbilityLevel()), new Ice(player.getAbilityLevel()),
+                new Lightning(player.getAbilityLevel()), new Reflect(player.getAbilityLevel()),
+                new Water(player.getAbilityLevel()), new Parry(player.getAbilityLevel()),
+                new Slash(player.getAbilityLevel()), new Swing(player.getAbilityLevel()),
+                new Thrust(player.getAbilityLevel()), new Focus(player.getAbilityLevel())));
         this.playerCards.removeAll(this.player.getCards());
 
         this.monster = new LinkedList<>() {{
             add(new ArrayList<>(
-                List.of(new Frog(), new Ghost(), new Skeleton(), new Spider(), new Goblin(), new Rat(),
-                    new Mushroomlin())) {
+                    List.of(new Frog(), new Ghost(), new Skeleton(), new Spider(), new Goblin(), new Rat(),
+                            new Mushroomlin())) {
             });
             add(new ArrayList<>(
-                List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(),
-                    new Mushroomlon(), new WildBoar())));
+                    List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(),
+                            new Mushroomlon(), new WildBoar())));
         }};
     }
 
@@ -117,7 +107,4 @@ public class RunasStrive {
         this.level = level;
     }
 
-    public void quitGame() {
-        this.session.stop();
-    }
 }

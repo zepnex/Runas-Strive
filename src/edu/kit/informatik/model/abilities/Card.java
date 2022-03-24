@@ -30,4 +30,8 @@ public abstract class Card {
         return this.getName().equals(card.getName());
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s(%d)", getName(), abilityLevel);
+    }
 }

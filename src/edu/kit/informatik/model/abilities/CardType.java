@@ -4,11 +4,11 @@ public enum CardType {
     /**
      *
      */
-    MAGICAL,
+    DEFENSIVE,
     /**
      *
      */
-    PHYSICAL,
+    OFFENSIVE,
     /**
      *
      */

@@ -1,7 +1,6 @@
 package edu.kit.informatik.controller.commands.levels;
 
-
-import edu.kit.informatik.controller.RunasStrive;
+import edu.kit.informatik.controller.Session;
 import edu.kit.informatik.model.enteties.Monster;
 import edu.kit.informatik.model.enteties.Player;
 import edu.kit.informatik.model.enteties.monster.SpiderKing;
@@ -13,17 +12,17 @@ import java.util.Queue;
 
 public class Level {
     private final Player player;
-    private List<Monster> monster;
+    private final Session session;
+    private final List<Monster> monster;
     Queue<Room> rooms;
     private final int level;
-    private final RunasStrive game;
 
 
-    public Level(Player player, List<Monster> monster, int level, RunasStrive game) {
+    public Level(Player player, List<Monster> monster, int level, Session session) {
         this.monster = monster;
         this.player = player;
         this.level = level;
-        this.game = game;
+        this.session = session;
         this.rooms = initRooms();
         loadRoom();
     }
@@ -36,9 +35,9 @@ public class Level {
                 roomMonster.add(this.monster.get(0));
                 this.monster.remove(0);
             }
-            rooms.add(new Room(this.player, roomMonster, this, (int) i));
+            rooms.add(new Room(this.session, this.player, roomMonster, this, (int) i));
         }
-        rooms.add(new Room(this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
+        rooms.add(new Room(this.session, this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
         return rooms;
     }
 
@@ -53,8 +52,5 @@ public class Level {
         return level;
     }
 
-    public void quitGame() {
-        game.quitGame();
-    }
 
 }

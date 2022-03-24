@@ -5,9 +5,9 @@ public abstract class Entity {
     private int focusPoints;
 
 
-    public Entity() {
+    public Entity(int focusPoints) {
         hp = getMaxHp();
-        this.focusPoints = 1;
+        this.focusPoints = focusPoints;
 
     }
 
