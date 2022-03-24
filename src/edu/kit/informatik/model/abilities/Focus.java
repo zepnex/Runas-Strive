@@ -2,7 +2,8 @@ package edu.kit.informatik.model.abilities;
 
 public class Focus extends Card {
     private static final String CARD_NAME = "Focus";
-    private static final CardType TYPE = CardType.NONE;
+    private static final CardType CARD_TYPE = CardType.NONE;
+    private static final CardClass CARD_CLASS = CardClass.NONE;
 
     public Focus(int n) {
         super(n);
@@ -14,8 +15,13 @@ public class Focus extends Card {
     }
 
     @Override
-    protected CardType getCardType() {
-        return null;
+    public CardType getCardType() {
+        return CARD_TYPE;
+    }
+
+    @Override
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 
 

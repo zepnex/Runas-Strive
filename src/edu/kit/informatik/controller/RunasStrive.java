@@ -39,12 +39,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Scanner;
 
 public class RunasStrive {
     private final Session session;
     private final Player player;
-    private Scanner scanner;
     private int level;
     private List<Card> playerCards;
     Queue<List<Monster>> monster;
@@ -53,7 +51,6 @@ public class RunasStrive {
     public RunasStrive(Session session, Player player) {
         this.session = session;
         this.player = player;
-
         initCards();
     }
 
@@ -66,20 +63,25 @@ public class RunasStrive {
         loadLevel();
     }
 
-    public void loadLevel() {
+    /**
+     * Todo: combat logik hier auslegen und room und level nur als modellierung nutzen
+     */
+
+
+    private void loadLevel() {
         while (this.level < 3) {
-            //TODO: shuffle cards
+            //Todo: shuffle cards in here
             new Level(this.player, this.monster.poll(), level, this.session);
             this.level++;
         }
     }
 
-    public void shuffle(int seedPlayer, int seedMonster) {
+    private void shuffle(int seedPlayer, int seedMonster) {
         Collections.shuffle(this.playerCards, new Random(seedPlayer));
         Collections.shuffle(this.monster.element(), new Random(seedMonster));
     }
 
-    public void initCards() {
+    private void initCards() {
         this.playerCards = new ArrayList<>(List.of(
                 new Fire(player.getAbilityLevel()), new Ice(player.getAbilityLevel()),
                 new Lightning(player.getAbilityLevel()), new Reflect(player.getAbilityLevel()),
@@ -97,14 +99,6 @@ public class RunasStrive {
                     List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(),
                             new Mushroomlon(), new WildBoar())));
         }};
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
 }

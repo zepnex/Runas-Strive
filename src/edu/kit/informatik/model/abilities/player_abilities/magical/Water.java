@@ -1,12 +1,13 @@
 package edu.kit.informatik.model.abilities.player_abilities.magical;
 
 
+import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 
 public class Water extends OffensiveCard {
     private static final String CARD_NAME = "Water";
-    private static final CardType TYPE = CardType.OFFENSIVE;
+    private static final CardClass CARD_CLASS = CardClass.MAGICAL;
     private static final int COST = 1;
 
     public Water(int n) {
@@ -24,7 +25,7 @@ public class Water extends OffensiveCard {
     }
 
     @Override
-    protected CardType getCardType() {
-        return TYPE;
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 }

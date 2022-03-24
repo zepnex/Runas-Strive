@@ -1,12 +1,13 @@
 package edu.kit.informatik.model.abilities.monster_abilities.physical;
 
 
+import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 
 public class Bite extends OffensiveCard {
     private static final String CARD_NAME = "Bite";
-    private static final CardType TYPE = CardType.OFFENSIVE;
+    private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
 
     public Bite(int n) {
         super(n);
@@ -23,7 +24,7 @@ public class Bite extends OffensiveCard {
     }
 
     @Override
-    protected CardType getCardType() {
-        return TYPE;
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 }

@@ -1,12 +1,13 @@
 package edu.kit.informatik.model.abilities.player_abilities.magical;
 
 
+import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 
 public class Lightning extends OffensiveCard {
     private static final String CARD_NAME = "Lightning";
-    private static final CardType TYPE = CardType.OFFENSIVE;
+    private static final CardClass CARD_CLASS = CardClass.MAGICAL;
     private static final int COST = 1;
 
     public Lightning(int n) {
@@ -24,7 +25,7 @@ public class Lightning extends OffensiveCard {
     }
 
     @Override
-    protected CardType getCardType() {
-        return TYPE;
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 }

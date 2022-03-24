@@ -34,6 +34,7 @@ public class Room {
         while (this.player.getCurrentHp() > 0 && monstersAlive()) {
             selectCard();
             if (this.monsters.size() > 1) selectTarget();
+            //TODO:
 
         }
     }
@@ -65,7 +66,7 @@ public class Room {
         TargetRequest targetSelection = new TargetRequest(this.monsters);
         this.session.requestInput(targetSelection);
         if (!targetSelection.getAnswerFlag().equals(AnswerFlag.QUIT))
-            System.out.println("test");
+            this.currentTarget = targetSelection.getValue();
     }
 
     private boolean monstersAlive() {

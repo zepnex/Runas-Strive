@@ -1,12 +1,13 @@
 package edu.kit.informatik.model.abilities.player_abilities.magical;
 
 
+import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.DefensiveCard;
 
 public class Reflect extends DefensiveCard {
     private static final String CARD_NAME = "Reflect";
-    private static final CardType TYPE = CardType.NONE;
+    private static final CardClass CARD_CLASS = CardClass.MAGICAL;
     private static final int COST = 0;
 
     public Reflect(int n) {
@@ -23,8 +24,9 @@ public class Reflect extends DefensiveCard {
         return CARD_NAME;
     }
 
+
     @Override
-    protected CardType getCardType() {
-        return TYPE;
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 }

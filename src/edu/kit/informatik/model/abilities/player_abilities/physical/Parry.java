@@ -1,6 +1,7 @@
 package edu.kit.informatik.model.abilities.player_abilities.physical;
 
 
+import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.DefensiveCard;
 
@@ -9,7 +10,7 @@ import edu.kit.informatik.model.abilities.DefensiveCard;
  */
 public class Parry extends DefensiveCard {
     private static final String CARD_NAME = "Parry";
-    private static final CardType TYPE = CardType.OFFENSIVE;
+    private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
 
     public Parry(int n) {
         super(n);
@@ -26,7 +27,7 @@ public class Parry extends DefensiveCard {
     }
 
     @Override
-    protected CardType getCardType() {
-        return TYPE;
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 }

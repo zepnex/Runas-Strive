@@ -1,7 +1,8 @@
 package edu.kit.informatik.model.abilities;
 
 public abstract class OffensiveCard extends Card {
-    private int cost;
+    public static CardType CARD_TYPE = CardType.OFFENSIVE;
+    private final int cost;
 
 
     public OffensiveCard(int n) {
@@ -14,5 +15,10 @@ public abstract class OffensiveCard extends Card {
 
     public int getCost() {
         return cost;
+    }
+
+    @Override
+    public CardType getCardType() {
+        return CARD_TYPE;
     }
 }

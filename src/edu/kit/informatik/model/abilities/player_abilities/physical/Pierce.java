@@ -1,12 +1,13 @@
 package edu.kit.informatik.model.abilities.player_abilities.physical;
 
 
+import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 
 public class Pierce extends OffensiveCard {
     private static final String CARD_NAME = "Pierce";
-    private static final CardType TYPE = CardType.OFFENSIVE;
+    private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
 
     public Pierce(int n) {
 
@@ -23,8 +24,9 @@ public class Pierce extends OffensiveCard {
         return CARD_NAME;
     }
 
+
     @Override
-    protected CardType getCardType() {
-        return TYPE;
+    public CardClass getCardClass() {
+        return CARD_CLASS;
     }
 }
