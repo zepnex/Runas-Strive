@@ -4,6 +4,7 @@ package edu.kit.informatik.model.abilities.player_abilities.magical;
 import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
+import edu.kit.informatik.model.enteties.MonsterType;
 
 public class Ice extends OffensiveCard {
     private static final String CARD_NAME = "Ice";
@@ -17,6 +18,11 @@ public class Ice extends OffensiveCard {
     @Override
     public int getDamage(int n, int f) {
         return (2 * n + 4) * f + 2;
+    }
+
+    @Override
+    public boolean isEffectiveOn(MonsterType monsterType) {
+        return monsterType.equals(MonsterType.WATER);
     }
 
     @Override

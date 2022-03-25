@@ -33,4 +33,9 @@ public class Ghost extends Monster {
     public Queue<Card> getAbilities() {
         return ABILITIES;
     }
+
+    @Override
+    public MonsterType getMonsterType() {
+        return TYPE;
+    }
 }

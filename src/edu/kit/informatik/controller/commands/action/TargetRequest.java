@@ -32,7 +32,7 @@ public class TargetRequest extends InputRequest<Monster> {
         for (int i = 0; i < this.monsters.size(); i++) {
             QUESTION.append(String.format("%d) %s \n", i + 1, this.monsters.get(i).getName()));
         }
-        return QUESTION.substring(0, QUESTION.length() - 2);
+        return QUESTION.toString();
     }
 
     @Override

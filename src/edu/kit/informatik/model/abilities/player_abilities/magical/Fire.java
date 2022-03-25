@@ -2,8 +2,8 @@ package edu.kit.informatik.model.abilities.player_abilities.magical;
 
 
 import edu.kit.informatik.model.abilities.CardClass;
-import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
+import edu.kit.informatik.model.enteties.MonsterType;
 
 public class Fire extends OffensiveCard {
     private static final String CARD_NAME = "Fire";
@@ -20,6 +20,11 @@ public class Fire extends OffensiveCard {
     }
 
     @Override
+    public boolean isEffectiveOn(MonsterType monsterType) {
+        return monsterType.equals(MonsterType.ICE);
+    }
+
+    @Override
     public String getName() {
         return CARD_NAME;
     }
@@ -28,6 +33,7 @@ public class Fire extends OffensiveCard {
     public CardClass getCardClass() {
         return CARD_CLASS;
     }
+
 
 
 }

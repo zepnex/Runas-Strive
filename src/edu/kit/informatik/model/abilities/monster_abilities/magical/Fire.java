@@ -4,6 +4,7 @@ package edu.kit.informatik.model.abilities.monster_abilities.magical;
 import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
+import edu.kit.informatik.model.enteties.MonsterType;
 
 
 public class Fire extends OffensiveCard {
@@ -17,6 +18,11 @@ public class Fire extends OffensiveCard {
     @Override
     public int getDamage(int n, int w) {
         return 12 * n + 2;
+    }
+
+    @Override
+    public boolean isEffectiveOn(MonsterType monsterType) {
+        return false;
     }
 
     @Override

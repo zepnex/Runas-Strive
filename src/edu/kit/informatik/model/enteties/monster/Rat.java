@@ -17,7 +17,7 @@ public class Rat extends Monster {
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
     private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Block(1), new Claw(1)));
+            = new LinkedList<>(List.of(new Block(1), new Claw(1)));
 
 
     @Override
@@ -34,4 +34,10 @@ public class Rat extends Monster {
     public Queue<Card> getAbilities() {
         return ABILITIES;
     }
+
+    @Override
+    public MonsterType getMonsterType() {
+        return TYPE;
+    }
+
 }

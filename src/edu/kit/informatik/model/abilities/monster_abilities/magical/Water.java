@@ -4,6 +4,7 @@ package edu.kit.informatik.model.abilities.monster_abilities.magical;
 import edu.kit.informatik.model.abilities.CardClass;
 import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
+import edu.kit.informatik.model.enteties.MonsterType;
 
 public class Water extends OffensiveCard {
     private static final String CARD_NAME = "Water";
@@ -16,6 +17,11 @@ public class Water extends OffensiveCard {
     @Override
     public int getDamage(int n, int w) {
         return 8 * n + 2;
+    }
+
+    @Override
+    public boolean isEffectiveOn(MonsterType monsterType) {
+        return false;
     }
 
     @Override

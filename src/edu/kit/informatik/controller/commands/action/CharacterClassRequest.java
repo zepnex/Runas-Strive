@@ -32,7 +32,7 @@ public class CharacterClassRequest extends InputRequest<CharacterClass> {
                     "%d) %s \n", characterClass.getCharID(), name.charAt(0) + name.substring(1).toLowerCase()));
 
         }
-        return QUESTION.append(builder.substring(0, builder.length() - 2)).toString();
+        return QUESTION.append(builder).toString();
     }
 
     @Override

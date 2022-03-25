@@ -18,8 +18,9 @@ public class Bear extends Monster {
     private static final String NAME = "Bear";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
+    private static final int ABILITY_LEVEL = 2;
     private static final Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Claw(2), new Scratch(2), new Block(2)));
+            = new LinkedList<>(List.of(new Claw(2), new Scratch(2), new Block(2)));
 
 
     @Override
@@ -35,5 +36,10 @@ public class Bear extends Monster {
     @Override
     public Queue<Card> getAbilities() {
         return ABILITIES;
+    }
+
+    @Override
+    public MonsterType getMonsterType() {
+        return TYPE;
     }
 }

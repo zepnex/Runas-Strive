@@ -3,7 +3,6 @@ package edu.kit.informatik.model.abilities;
 
 public abstract class Card {
     private final int abilityLevel;
-    private CardType type;
 
     public Card(int n) {
         this.abilityLevel = n;

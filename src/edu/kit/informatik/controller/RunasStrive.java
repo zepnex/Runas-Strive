@@ -1,11 +1,11 @@
 package edu.kit.informatik.controller;
 
-import edu.kit.informatik.controller.commands.action.CharacterClassRequest;
-import edu.kit.informatik.controller.commands.action.ShuffleCardRequest;
+import edu.kit.informatik.controller.commands.action.*;
 import edu.kit.informatik.controller.commands.levels.Level;
+import edu.kit.informatik.controller.commands.levels.Room;
 import edu.kit.informatik.controller.commands.requests.AnswerFlag;
-import edu.kit.informatik.model.abilities.Card;
-import edu.kit.informatik.model.abilities.Focus;
+
+import edu.kit.informatik.model.abilities.*;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Fire;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Ice;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Lightning;
@@ -15,23 +15,11 @@ import edu.kit.informatik.model.abilities.player_abilities.physical.Parry;
 import edu.kit.informatik.model.abilities.player_abilities.physical.Slash;
 import edu.kit.informatik.model.abilities.player_abilities.physical.Swing;
 import edu.kit.informatik.model.abilities.player_abilities.physical.Thrust;
+import edu.kit.informatik.model.enteties.Entity;
 import edu.kit.informatik.model.enteties.Monster;
+import edu.kit.informatik.model.enteties.MonsterType;
 import edu.kit.informatik.model.enteties.Player;
-import edu.kit.informatik.model.enteties.monster.Bear;
-import edu.kit.informatik.model.enteties.monster.DarkElf;
-import edu.kit.informatik.model.enteties.monster.Frog;
-import edu.kit.informatik.model.enteties.monster.Ghost;
-import edu.kit.informatik.model.enteties.monster.Goblin;
-import edu.kit.informatik.model.enteties.monster.Hornet;
-import edu.kit.informatik.model.enteties.monster.Mushroomlin;
-import edu.kit.informatik.model.enteties.monster.Mushroomlon;
-import edu.kit.informatik.model.enteties.monster.Rat;
-import edu.kit.informatik.model.enteties.monster.ShadowBlade;
-import edu.kit.informatik.model.enteties.monster.Skeleton;
-import edu.kit.informatik.model.enteties.monster.Snake;
-import edu.kit.informatik.model.enteties.monster.Spider;
-import edu.kit.informatik.model.enteties.monster.Tarantula;
-import edu.kit.informatik.model.enteties.monster.WildBoar;
+import edu.kit.informatik.model.enteties.monster.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,11 +34,15 @@ public class RunasStrive {
     private int level;
     private List<Card> playerCards;
     Queue<List<Monster>> monster;
+    private Level currentLevel;
+    private Room currentRoom;
+    private AnswerFlag status = AnswerFlag.VALID;
 
 
     public RunasStrive(Session session, Player player) {
         this.session = session;
         this.player = player;
+        this.level = 1;
         initCards();
     }
 
@@ -58,9 +50,10 @@ public class RunasStrive {
     public void start() {
         ShuffleCardRequest shuffle = new ShuffleCardRequest();
         this.session.requestInput(shuffle);
-        if (!shuffle.getAnswerFlag().equals(AnswerFlag.QUIT))
+        if (!shuffle.getAnswerFlag().equals(AnswerFlag.QUIT)) {
             shuffle(shuffle.getValue().poll(), shuffle.getValue().poll());
-        loadLevel();
+            loadLevel();
+        }
     }
 
     /**
@@ -69,13 +62,117 @@ public class RunasStrive {
 
 
     private void loadLevel() {
-        while (this.level < 3) {
-            //Todo: shuffle cards in here
-            new Level(this.player, this.monster.poll(), level, this.session);
-            this.level++;
+
+        //Todo: shuffle cards in here
+        currentLevel = new Level(this.player, this.monster.poll(), level, this.session);
+        this.level++;
+        currentRoom = currentLevel.loadRoom();
+        combat();
+    }
+
+    private void combat() {
+        this.currentRoom.printIntro();
+        while (currentRoom.monstersAlive() && this.player.getCurrentHp() > 0) {
+            currentRoom.printEncounter();
+            requestCard();
+            if (this.currentRoom.getMonsters().size() > 1) {
+                requestTarget();
+            } else {
+                this.player.setCurrentTarget(currentRoom.getMonsters().get(0));
+            }
+            evaluateCard(this.player, this.player.getCurrentCard());
+            for (Monster monster : currentRoom.getMonsters()) {
+                monster.setCurrentTarget(this.player);
+                monster.getCard();
+                evaluateCard(monster, monster.getCurrentCard());
+            }
         }
     }
 
+    private void evaluateCard(Entity entity, Card card) {
+        if (entity.getCurrentHp() > 0) {
+            if (card.getCardType().equals(CardType.OFFENSIVE)) {
+                evaluateOffensive(entity, (OffensiveCard) card);
+                checkFocus(entity);
+            } else if (card.getCardType().equals(CardType.DEFENSIVE)) {
+
+                session.printTurn(entity, card);
+                checkFocus(entity);
+
+            } else {
+
+                session.printTurn(entity, card);
+                checkFocus(entity);
+                entity.toggleFocus();
+
+            }
+        } else {
+            this.session.printDeath(entity);
+        }
+    }
+
+    private void checkFocus(Entity entity) {
+        if (entity.isFocused()) {
+            entity.increaseFocusPoints();
+            session.printFocus(entity);
+            System.out.println("test");
+            entity.toggleFocus();
+        }
+    }
+
+
+    private void evaluateOffensive(Entity entity, OffensiveCard card) {
+        Entity target = entity.getCurrentTarget();
+        int damage;
+
+        this.session.printTurn(entity, card);
+        if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
+        if (entity.isPlayer()) {
+            MonsterType enemy = ((Monster) target).getMonsterType();
+            damage = card.getDamage(card.getAbilityLevel(), requestDice())
+                    + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+        } else {
+            damage = card.getDamage(card.getAbilityLevel(), 0);
+        }
+        if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
+            DefensiveCard defense = (DefensiveCard) target.getCurrentCard();
+            damage -= defense.getDefense(defense.getAbilityLevel());
+        }
+        if (damage >= 0) {
+            target.dealDamage(damage);
+        } else if (!entity.isPlayer() && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
+            entity.dealDamage(Math.abs(damage));
+        }
+
+
+        this.session.printDamage(target, Math.max(damage, 0), card.getCardClass().getShortCut());
+
+    }
+
+    private int requestDice() {
+        DiceRollRequest rollRequest = new DiceRollRequest(this.player.getDice());
+        this.session.requestInput(rollRequest);
+        if (!rollRequest.getAnswerFlag().equals(AnswerFlag.QUIT))
+            return rollRequest.getValue();
+        return 0;
+    }
+
+    private void requestTarget() {
+        TargetRequest targetSelection = new TargetRequest(this.currentRoom.getMonsters());
+        this.session.requestInput(targetSelection);
+        if (!targetSelection.getAnswerFlag().equals(AnswerFlag.QUIT))
+            this.player.setCurrentTarget(targetSelection.getValue());
+    }
+
+    private void requestCard() {
+        SelectCardRequest cardSelection = new SelectCardRequest(this.player.getCards());
+        this.session.requestInput(cardSelection);
+        if (!cardSelection.getAnswerFlag().equals(AnswerFlag.QUIT))
+            this.player.setCurrentCard(cardSelection.getValue());
+    }
+
+
+    //Todo: initCards und shuffle wo anders hin
     private void shuffle(int seedPlayer, int seedMonster) {
         Collections.shuffle(this.playerCards, new Random(seedPlayer));
         Collections.shuffle(this.monster.element(), new Random(seedMonster));
@@ -83,22 +180,21 @@ public class RunasStrive {
 
     private void initCards() {
         this.playerCards = new ArrayList<>(List.of(
-                new Fire(player.getAbilityLevel()), new Ice(player.getAbilityLevel()),
-                new Lightning(player.getAbilityLevel()), new Reflect(player.getAbilityLevel()),
-                new Water(player.getAbilityLevel()), new Parry(player.getAbilityLevel()),
-                new Slash(player.getAbilityLevel()), new Swing(player.getAbilityLevel()),
-                new Thrust(player.getAbilityLevel()), new Focus(player.getAbilityLevel())));
+                new Fire(this.level), new Ice(this.level),
+                new Lightning(this.level), new Reflect(this.level),
+                new Water(this.level), new Parry(this.level),
+                new Slash(this.level), new Swing(this.level),
+                new Thrust(this.level), new Focus(this.level)));
         this.playerCards.removeAll(this.player.getCards());
 
         this.monster = new LinkedList<>() {{
             add(new ArrayList<>(
-                    List.of(new Frog(), new Ghost(), new Skeleton(), new Spider(), new Goblin(), new Rat(),
-                            new Mushroomlin())) {
+                    List.of(new Frog(), new Ghost(), new Gorgon(), new Skeleton(), new Spider(), new Goblin(),
+                            new Rat(), new Mushroomlin())) {
             });
             add(new ArrayList<>(
                     List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(),
                             new Mushroomlon(), new WildBoar())));
         }};
     }
-
 }

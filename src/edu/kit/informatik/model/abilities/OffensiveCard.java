@@ -1,5 +1,7 @@
 package edu.kit.informatik.model.abilities;
 
+import edu.kit.informatik.model.enteties.MonsterType;
+
 public abstract class OffensiveCard extends Card {
     public static CardType CARD_TYPE = CardType.OFFENSIVE;
     private final int cost;
@@ -10,7 +12,7 @@ public abstract class OffensiveCard extends Card {
         this.cost = n;
     }
 
-    public abstract int getDamage(int n, int w);
+    public abstract int getDamage(int n, int factor);
 
 
     public int getCost() {
@@ -21,4 +23,6 @@ public abstract class OffensiveCard extends Card {
     public CardType getCardType() {
         return CARD_TYPE;
     }
+
+    public abstract boolean isEffectiveOn(MonsterType monsterType);
 }

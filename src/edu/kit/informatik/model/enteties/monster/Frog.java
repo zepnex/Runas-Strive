@@ -34,4 +34,9 @@ public class Frog extends Monster {
     public Queue<Card> getAbilities() {
         return ABILITIES;
     }
+
+    @Override
+    public MonsterType getMonsterType() {
+        return TYPE;
+    }
 }

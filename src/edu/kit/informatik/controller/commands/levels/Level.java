@@ -24,7 +24,6 @@ public class Level {
         this.level = level;
         this.session = session;
         this.rooms = initRooms();
-        loadRoom();
     }
 
     private Queue<Room> initRooms() {
@@ -35,17 +34,14 @@ public class Level {
                 roomMonster.add(this.monster.get(0));
                 this.monster.remove(0);
             }
-            rooms.add(new Room(this.session, this.player, roomMonster, this, (int) i));
+            rooms.add(new Room(this.player, roomMonster, this, (int) i));
         }
-        rooms.add(new Room(this.session, this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
+        rooms.add(new Room(this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
         return rooms;
     }
 
-    public void loadRoom() {
-        while (!this.rooms.isEmpty()) {
-            Room currentRoom = this.rooms.poll();
-            currentRoom.start();
-        }
+    public Room loadRoom() {
+        return this.rooms.poll();
     }
 
     public int getLevel() {

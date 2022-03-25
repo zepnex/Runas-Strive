@@ -17,7 +17,7 @@ public class DarkElf extends Monster {
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
     private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Focus(2), new Water(1), new Lightning(1)));
+            = new LinkedList<>(List.of(new Focus(2), new Water(1), new Lightning(1)));
 
 
     @Override
@@ -33,5 +33,10 @@ public class DarkElf extends Monster {
     @Override
     public Queue<Card> getAbilities() {
         return ABILITIES;
+    }
+
+    @Override
+    public MonsterType getMonsterType() {
+        return TYPE;
     }
 }

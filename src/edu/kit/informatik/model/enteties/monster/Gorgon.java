@@ -17,7 +17,7 @@ public class Gorgon extends Monster {
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.FIRE;
     private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Focus(1), new Fire(1)));
+            = new LinkedList<>(List.of(new Focus(1), new Fire(1)));
 
 
     @Override
@@ -34,4 +34,10 @@ public class Gorgon extends Monster {
     public Queue<Card> getAbilities() {
         return ABILITIES;
     }
+
+    @Override
+    public MonsterType getMonsterType() {
+        return TYPE;
+    }
+
 }
