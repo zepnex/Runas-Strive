@@ -32,6 +32,7 @@ public class RunasStrive {
     private final Session session;
     private final Player player;
     private int level;
+    private int room;
     private List<Card> playerCards;
     Queue<List<Monster>> monster;
     private Level currentLevel;
@@ -43,6 +44,7 @@ public class RunasStrive {
         this.session = session;
         this.player = player;
         this.level = 1;
+        this.room = 1;
         initCards();
     }
 
@@ -54,6 +56,7 @@ public class RunasStrive {
             shuffle(shuffle.getValue().poll(), shuffle.getValue().poll());
             loadLevel();
         }
+        if (level <= 2) start();
     }
 
     /**
@@ -62,12 +65,12 @@ public class RunasStrive {
 
 
     private void loadLevel() {
-
         //Todo: shuffle cards in here
-        currentLevel = new Level(this.player, this.monster.poll(), level, this.session);
+        currentLevel = new Level(this.player, this.monster.poll(), level);
         this.level++;
         currentRoom = currentLevel.loadRoom();
         combat();
+        if (room <= 4) loadLevel();
     }
 
     private void combat() {
@@ -89,22 +92,24 @@ public class RunasStrive {
         }
     }
 
+    private boolean checkCost(Monster entity, OffensiveCard card) {
+        return entity.getFocusPoints() >= card.getCost();
+    }
+
     private void evaluateCard(Entity entity, Card card) {
         if (entity.getCurrentHp() > 0) {
             if (card.getCardType().equals(CardType.OFFENSIVE)) {
-                evaluateOffensive(entity, (OffensiveCard) card);
-                checkFocus(entity);
+                if (((OffensiveCard) card).getCost() <= entity.getFocusPoints()) {
+                    evaluateOffensive(entity, (OffensiveCard) card);
+                    checkFocus(entity);
+                }
             } else if (card.getCardType().equals(CardType.DEFENSIVE)) {
-
                 session.printTurn(entity, card);
                 checkFocus(entity);
-
             } else {
-
                 session.printTurn(entity, card);
                 checkFocus(entity);
                 entity.toggleFocus();
-
             }
         } else {
             this.session.printDeath(entity);
@@ -132,6 +137,9 @@ public class RunasStrive {
             damage = card.getDamage(card.getAbilityLevel(), requestDice())
                     + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
         } else {
+            while (checkCost((Monster) entity, card)) {
+                ((Monster) entity).getCard();
+            }
             damage = card.getDamage(card.getAbilityLevel(), 0);
         }
         if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
@@ -198,3 +206,8 @@ public class RunasStrive {
         }};
     }
 }
+
+/**
+ * Todo: Heal, Reward, Die/Win,
+ * Todo: error when not enough ability points i guess its done
+ */

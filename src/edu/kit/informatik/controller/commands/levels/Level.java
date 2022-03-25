@@ -12,17 +12,15 @@ import java.util.Queue;
 
 public class Level {
     private final Player player;
-    private final Session session;
     private final List<Monster> monster;
     Queue<Room> rooms;
     private final int level;
 
 
-    public Level(Player player, List<Monster> monster, int level, Session session) {
+    public Level(Player player, List<Monster> monster, int level) {
         this.monster = monster;
         this.player = player;
         this.level = level;
-        this.session = session;
         this.rooms = initRooms();
     }
 
