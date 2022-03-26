@@ -53,6 +53,10 @@ public abstract class Entity {
         return isFocused;
     }
 
+    public int getMaxFocusPoint() {
+        return maxFocusPoint;
+    }
+
     public void setMaxFocusPoint(int maxFocusPoint) {
         this.maxFocusPoint = maxFocusPoint;
     }

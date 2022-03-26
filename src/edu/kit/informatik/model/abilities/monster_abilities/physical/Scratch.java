@@ -9,9 +9,11 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Scratch extends OffensiveCard {
     private static final String CARD_NAME = "Scratch";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
+    private static final int COST = 0;
 
     public Scratch(int n) {
         super(n);
+        setCost(COST);
     }
     //TODO: Bricht Focus
 

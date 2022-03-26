@@ -9,9 +9,11 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Smash extends OffensiveCard {
     private static final String CARD_NAME = "Smash";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
+    private static final int COST = 0;
 
     public Smash(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override
@@ -33,4 +35,5 @@ public class Smash extends OffensiveCard {
     public CardClass getCardClass() {
         return CARD_CLASS;
     }
+
 }

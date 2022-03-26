@@ -9,9 +9,11 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Bite extends OffensiveCard {
     private static final String CARD_NAME = "Bite";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
+    private static final int COST = 0;
 
     public Bite(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

@@ -10,6 +10,7 @@ import edu.kit.informatik.model.enteties.Player;
 import java.util.Scanner;
 
 public class Session {
+    private static final String WELCOME = "Welcome to Runa's Strive";
     private final Scanner scanner;
     private Player player;
 
@@ -18,7 +19,7 @@ public class Session {
     }
 
     public void start() {
-
+        System.out.println(WELCOME);
         if (this.player == null) {
             CharacterClassRequest request = new CharacterClassRequest();
             requestInput(request);
@@ -42,7 +43,7 @@ public class Session {
     }
 
     public void printDamage(Entity entity, int damage, String type) {
-        System.out.printf("%s took %d %s damage\n", entity.getName(), damage, type);
+        System.out.printf("%s takes %d %s damage\n", entity.getName(), damage, type);
     }
 
     public void printTurn(Entity entity, Card card) {
@@ -50,10 +51,21 @@ public class Session {
     }
 
     public void printFocus(Entity entity) {
-        System.out.printf("%s gains 1 focus\n", entity.getName());
+        if (entity.getFocusPoints() < entity.getMaxFocusPoint())
+            System.out.printf("%s gains 1 focus\n", entity.getName());
+    }
+
+    public void printUpgradeDice(Player player) {
+        System.err.printf("Runa upgrades her die to a %dD\n", player.getDice());
+
+    }
+
+    public void printAddCard() {
+
     }
 
     public void printDeath(Entity entity) {
         System.out.printf("%s dies\n", entity.getName());
     }
+
 }

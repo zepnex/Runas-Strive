@@ -8,10 +8,8 @@ import java.util.Queue;
 
 public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
 
-    private static final String QUESTION = "To shuffle ability cards and monsters, enter two seeds \n";
-    private static final String ANSWER = String.format("Enter number [1--%d]", Integer.MAX_VALUE);
-    private static final String MAX_INT_STR = String.valueOf(Integer.MAX_VALUE);
-    private static final String REGEX = "^\\d+$";
+    private static final String QUESTION = "To shuffle ability cards and monsters, enter two seeds\n";
+    private static final String ANSWER = String.format("Enter seeds [1--%d] separated by comma:", Integer.MAX_VALUE);
 
     @Override
     public void process(String input) {
@@ -19,6 +17,10 @@ public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
         Queue<Integer> intSeeds = new LinkedList<>();
         if (input.equals("quit")) {
             setAnswerFlag(AnswerFlag.QUIT);
+            return;
+        }
+        if(input.endsWith(",")) {
+            setAnswerFlag(AnswerFlag.UNUSABLE);
             return;
         }
         if (seeds.length == 2) {

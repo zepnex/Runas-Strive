@@ -9,16 +9,18 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Slash extends OffensiveCard {
     private static final String CARD_NAME = "Slash";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
+    private static final int COST = 0;
 
 
     public Slash(int n) {
         super(n);
+        setCost(COST);
     }
 
     //TODO: Bricht irgendwie Focus
     @Override
     public int getDamage(int n, int w) {
-        return 4 * n + w;
+        return (4 * n) + w;
     }
 
     @Override

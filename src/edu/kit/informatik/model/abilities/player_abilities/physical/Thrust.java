@@ -9,9 +9,11 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Thrust extends OffensiveCard {
     private static final String CARD_NAME = "Thrust";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
+    private static final int COST = 0;
 
     public Thrust(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

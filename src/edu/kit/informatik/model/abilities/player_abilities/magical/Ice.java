@@ -13,6 +13,7 @@ public class Ice extends OffensiveCard {
 
     public Ice(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

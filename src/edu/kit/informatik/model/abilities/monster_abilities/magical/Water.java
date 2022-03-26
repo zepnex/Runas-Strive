@@ -9,9 +9,12 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Water extends OffensiveCard {
     private static final String CARD_NAME = "Water";
     private static final CardClass CARD_CLASS = CardClass.MAGICAL;
+    private static final int COST = 1;
+
 
     public Water(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

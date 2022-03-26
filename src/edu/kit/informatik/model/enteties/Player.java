@@ -9,6 +9,7 @@ public class Player extends Entity {
     private static final int MAX_HP = 50;
     private static final int FOCUS_POINTS = 1;
     public static final String NAME = "Runa";
+    private static final int MAX_DICE = 12;
     private final CharacterClass characterClass;
     public int dice;
     private List<Card> cards;
@@ -35,8 +36,8 @@ public class Player extends Entity {
         this.abilityLevel = abilityLevel;
     }
 
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
+    public void addCards(List<Card> cards) {
+        this.cards.addAll(cards);
     }
 
     public List<Card> getCards() {
@@ -53,9 +54,11 @@ public class Player extends Entity {
         return dice;
     }
 
-    public void setDice(int getDice) {
-        this.dice = getDice;
-        setMaxFocusPoint(this.dice);
+    public void increaseDice(int getDice) {
+        if (dice < MAX_DICE) {
+            this.dice = getDice;
+            setMaxFocusPoint(this.dice);
+        }
     }
 
 
@@ -63,4 +66,5 @@ public class Player extends Entity {
     public boolean isPlayer() {
         return true;
     }
+
 }

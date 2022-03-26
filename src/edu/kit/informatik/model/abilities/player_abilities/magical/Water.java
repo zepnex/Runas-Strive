@@ -13,6 +13,7 @@ public class Water extends OffensiveCard {
 
     public Water(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

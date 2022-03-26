@@ -8,9 +8,12 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Lightning extends OffensiveCard {
     private static final String CARD_NAME = "Lightning";
     private static final CardClass CARD_CLASS = CardClass.MAGICAL;
+    private static final int COST = 1;
+
 
     public Lightning(int n) {
         super(n);
+        setCost(COST);
     }
 
 

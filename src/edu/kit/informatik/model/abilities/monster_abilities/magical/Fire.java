@@ -10,9 +10,11 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Fire extends OffensiveCard {
     private static final String CARD_NAME = "Fire";
     private static final CardClass CARD_CLASS = CardClass.MAGICAL;
+    private static final int COST = 1;
 
     public Fire(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

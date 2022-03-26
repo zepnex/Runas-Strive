@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TargetRequest extends InputRequest<Monster> {
     private static final String QUESTION = "Select Runa's target\n";
-    private static final String ANSWER = "Enter number [1--%d]";
+    private static final String ANSWER = "Enter number [1--%d]:";
     private static final String REGEX = "[1-%d]";
     private final List<Monster> monsters;
 

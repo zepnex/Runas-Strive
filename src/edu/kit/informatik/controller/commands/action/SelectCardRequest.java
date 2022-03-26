@@ -7,8 +7,8 @@ import edu.kit.informatik.model.abilities.Card;
 import java.util.List;
 
 public class SelectCardRequest extends InputRequest<Card> {
-    private static final String QUESTION = "Select card to play \n";
-    private static final String ANSWER = "Enter number [1--%d]";
+    private static final String QUESTION = "Select card to play\n";
+    private static final String ANSWER = "Enter number [1--%d]:";
     private static final String REGEX = "[1-%d]";
     private final List<Card> cards;
 
@@ -34,7 +34,7 @@ public class SelectCardRequest extends InputRequest<Card> {
     public String getQuestion() {
         StringBuilder builder = new StringBuilder(QUESTION);
         for (int i = 0; i < this.cards.size(); i++) {
-            builder.append(String.format("%d) %s \n", i + 1, this.cards.get(i).toString()));
+            builder.append(String.format("%d) %s\n", i + 1, this.cards.get(i).toString()));
         }
         return builder.toString();
     }

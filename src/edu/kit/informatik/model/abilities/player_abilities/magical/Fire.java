@@ -12,6 +12,7 @@ public class Fire extends OffensiveCard {
 
     public Fire(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

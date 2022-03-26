@@ -13,6 +13,7 @@ public class Lightning extends OffensiveCard {
 
     public Lightning(int n) {
         super(n);
+        setCost(COST);
     }
 
     @Override

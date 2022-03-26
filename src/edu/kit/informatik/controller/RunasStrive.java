@@ -5,6 +5,7 @@ import edu.kit.informatik.controller.commands.levels.Level;
 import edu.kit.informatik.controller.commands.levels.Room;
 import edu.kit.informatik.controller.commands.requests.AnswerFlag;
 
+import edu.kit.informatik.controller.commands.requests.Reward;
 import edu.kit.informatik.model.abilities.*;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Fire;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Ice;
@@ -69,6 +70,7 @@ public class RunasStrive {
         for (int i = 0; i < 4; i++) {
             currentRoom = currentLevel.loadRoom();
             combat();
+            requestReward();
         }
     }
 
@@ -88,7 +90,7 @@ public class RunasStrive {
     }
 
     private boolean checkCost(Monster entity, OffensiveCard card) {
-        return entity.getFocusPoints() >= card.getCost();
+        return !(entity.getFocusPoints() >= card.getCost());
     }
 
     //Todo: load next level
@@ -97,19 +99,20 @@ public class RunasStrive {
             if (card.getCardType().equals(CardType.OFFENSIVE)) {
                 if (!entity.isPlayer()) checkFocus(entity);
                 if (((OffensiveCard) card).getCost() <= entity.getFocusPoints()) {
-                    if (entity.isPlayer() && this.currentRoom.getMonsters().size() > 1) {
-                        requestTarget();
-                    } else {
-                        this.player.setCurrentTarget(currentRoom.getMonsters().get(0));
+                    if (entity.isPlayer()) {
+                        if (entity.isPlayer() && this.currentRoom.getMonsters().size() > 1) {
+                            requestTarget();
+                        } else {
+                            this.player.setCurrentTarget(currentRoom.getMonsters().get(0));
+                        }
                     }
                     evaluateOffensive(entity, (OffensiveCard) card);
-                    if (entity.isPlayer())
-                        checkFocus(entity);
+                    if (entity.isPlayer()) checkFocus(entity);
                 }
             } else if (card.getCardType().equals(CardType.DEFENSIVE)) {
 
                 session.printTurn(entity, card);
-                if(!entity.isPlayer()) checkFocus(entity);
+                if (!entity.isPlayer()) checkFocus(entity);
 
             } else {
                 session.printTurn(entity, card);
@@ -133,31 +136,58 @@ public class RunasStrive {
     private void evaluateOffensive(Entity entity, OffensiveCard card) {
         Entity target = entity.getCurrentTarget();
         int damage;
-
         this.session.printTurn(entity, card);
-        if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
         if (entity.isPlayer()) {
             MonsterType enemy = ((Monster) target).getMonsterType();
-            damage = card.getDamage(card.getAbilityLevel(), requestDice()) + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+            if (card.getCardClass().equals(CardClass.MAGICAL)) {
+                damage = card.getDamage(card.getAbilityLevel(), entity.getFocusPoints());
+                if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
+            } else {
+                damage = card.getDamage(card.getAbilityLevel(), requestDice()) + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+            }
         } else {
             while (checkCost((Monster) entity, card)) {
                 ((Monster) entity).getCard();
             }
             damage = card.getDamage(card.getAbilityLevel(), 0);
+            if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
         }
+        if (card.breaksFocus() && target.isFocused()) {
+            target.toggleFocus();
+        }
+
         if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
             DefensiveCard defense = (DefensiveCard) target.getCurrentCard();
             damage -= defense.getDefense(defense.getAbilityLevel());
         }
-        if (damage >= 0) {
+        if (damage > 0) {
             target.dealDamage(damage);
+            this.session.printDamage(target, damage, card.getCardClass().getShortCut());
         } else if (!entity.isPlayer() && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
             entity.dealDamage(Math.abs(damage));
         }
+    }
 
+    private void requestReward() {
+        RewardReqeust rewardReqeust = new RewardReqeust();
+        this.session.requestInput(rewardReqeust);
+        if (!rewardReqeust.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+            if (rewardReqeust.getValue().equals(Reward.DICE)) {
+                this.player.increaseDice(this.player.getDice() + 2);
+                this.session.printUpgradeDice(this.player);
+            } else {
+                requestCardReward();
+            }
+        }
 
-        this.session.printDamage(target, Math.max(damage, 0), card.getCardClass().getShortCut());
+    }
 
+    private void requestCardReward() {
+        CardRewardRequest cardRewardRequest = new CardRewardRequest(this.playerCards.subList(0, room == 1 ? 2 : 4));
+        this.session.requestInput(cardRewardRequest);
+        if (!cardRewardRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+            this.player.addCards(cardRewardRequest.getValue());
+        }
     }
 
     private int requestDice() {
@@ -211,5 +241,4 @@ public class RunasStrive {
 
 /**
  * Todo: Heal, Reward, Die/Win,
- * Todo: Break focus
  */

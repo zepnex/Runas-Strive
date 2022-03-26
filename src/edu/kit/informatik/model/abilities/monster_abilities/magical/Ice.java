@@ -9,10 +9,12 @@ import edu.kit.informatik.model.enteties.MonsterType;
 public class Ice extends OffensiveCard {
     private static final String CARD_NAME = "Ice";
     private static final CardClass CARD_CLASS = CardClass.MAGICAL;
+    private static final int COST = 1;
+
 
     public Ice(int n) {
         super(n);
-
+        setCost(COST);
     }
 
     @Override

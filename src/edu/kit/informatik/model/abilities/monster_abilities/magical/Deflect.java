@@ -13,7 +13,6 @@ public class Deflect extends DefensiveCard {
 
     public Deflect(int n) {
         super(n);
-
     }
 
     @Override

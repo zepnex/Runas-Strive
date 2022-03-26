@@ -4,16 +4,18 @@ import edu.kit.informatik.model.enteties.MonsterType;
 
 public abstract class OffensiveCard extends Card {
     public static CardType CARD_TYPE = CardType.OFFENSIVE;
-    private final int cost;
+    private int cost;
 
 
     public OffensiveCard(int n) {
         super(n);
-        this.cost = n;
     }
 
     public abstract int getDamage(int n, int factor);
 
+    protected void setCost(int cost) {
+        this.cost = cost;
+    }
 
     public int getCost() {
         return cost;
@@ -24,9 +26,10 @@ public abstract class OffensiveCard extends Card {
         return CARD_TYPE;
     }
 
-    public boolean breaksFocus(){
+    public boolean breaksFocus() {
         return false;
     }
+
 
     public abstract boolean isEffectiveOn(MonsterType monsterType);
 }
