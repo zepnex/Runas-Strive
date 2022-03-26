@@ -50,13 +50,7 @@ public class RunasStrive {
 
 
     public void start() {
-        ShuffleCardRequest shuffle = new ShuffleCardRequest();
-        this.session.requestInput(shuffle);
-        if (!shuffle.getAnswerFlag().equals(AnswerFlag.QUIT)) {
-            shuffle(shuffle.getValue().poll(), shuffle.getValue().poll());
-            loadLevel();
-        }
-        if (level <= 2) start();
+        loadLevel();
     }
 
     /**
@@ -65,12 +59,17 @@ public class RunasStrive {
 
 
     private void loadLevel() {
-        //Todo: shuffle cards in here
+        shuffleCards();
         currentLevel = new Level(this.player, this.monster.poll(), level);
         this.level++;
-        currentRoom = currentLevel.loadRoom();
-        combat();
-        if (room <= 4) loadLevel();
+        loadRoom();
+    }
+
+    void loadRoom() {
+        for (int i = 0; i < 4; i++) {
+            currentRoom = currentLevel.loadRoom();
+            combat();
+        }
     }
 
     private void combat() {
@@ -78,17 +77,13 @@ public class RunasStrive {
         while (currentRoom.monstersAlive() && this.player.getCurrentHp() > 0) {
             currentRoom.printEncounter();
             requestCard();
-            if (this.currentRoom.getMonsters().size() > 1) {
-                requestTarget();
-            } else {
-                this.player.setCurrentTarget(currentRoom.getMonsters().get(0));
-            }
             evaluateCard(this.player, this.player.getCurrentCard());
             for (Monster monster : currentRoom.getMonsters()) {
                 monster.setCurrentTarget(this.player);
                 monster.getCard();
                 evaluateCard(monster, monster.getCurrentCard());
             }
+            checkFocus(this.player);
         }
     }
 
@@ -96,16 +91,26 @@ public class RunasStrive {
         return entity.getFocusPoints() >= card.getCost();
     }
 
+    //Todo: load next level
     private void evaluateCard(Entity entity, Card card) {
         if (entity.getCurrentHp() > 0) {
             if (card.getCardType().equals(CardType.OFFENSIVE)) {
+                if (!entity.isPlayer()) checkFocus(entity);
                 if (((OffensiveCard) card).getCost() <= entity.getFocusPoints()) {
+                    if (entity.isPlayer() && this.currentRoom.getMonsters().size() > 1) {
+                        requestTarget();
+                    } else {
+                        this.player.setCurrentTarget(currentRoom.getMonsters().get(0));
+                    }
                     evaluateOffensive(entity, (OffensiveCard) card);
-                    checkFocus(entity);
+                    if (entity.isPlayer())
+                        checkFocus(entity);
                 }
             } else if (card.getCardType().equals(CardType.DEFENSIVE)) {
+
                 session.printTurn(entity, card);
-                checkFocus(entity);
+                if(!entity.isPlayer()) checkFocus(entity);
+
             } else {
                 session.printTurn(entity, card);
                 checkFocus(entity);
@@ -120,7 +125,6 @@ public class RunasStrive {
         if (entity.isFocused()) {
             entity.increaseFocusPoints();
             session.printFocus(entity);
-            System.out.println("test");
             entity.toggleFocus();
         }
     }
@@ -134,8 +138,7 @@ public class RunasStrive {
         if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
         if (entity.isPlayer()) {
             MonsterType enemy = ((Monster) target).getMonsterType();
-            damage = card.getDamage(card.getAbilityLevel(), requestDice())
-                    + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+            damage = card.getDamage(card.getAbilityLevel(), requestDice()) + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
         } else {
             while (checkCost((Monster) entity, card)) {
                 ((Monster) entity).getCard();
@@ -160,8 +163,7 @@ public class RunasStrive {
     private int requestDice() {
         DiceRollRequest rollRequest = new DiceRollRequest(this.player.getDice());
         this.session.requestInput(rollRequest);
-        if (!rollRequest.getAnswerFlag().equals(AnswerFlag.QUIT))
-            return rollRequest.getValue();
+        if (!rollRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) return rollRequest.getValue();
         return 0;
     }
 
@@ -187,27 +189,27 @@ public class RunasStrive {
     }
 
     private void initCards() {
-        this.playerCards = new ArrayList<>(List.of(
-                new Fire(this.level), new Ice(this.level),
-                new Lightning(this.level), new Reflect(this.level),
-                new Water(this.level), new Parry(this.level),
-                new Slash(this.level), new Swing(this.level),
-                new Thrust(this.level), new Focus(this.level)));
+        this.playerCards = new ArrayList<>(List.of(new Fire(this.level), new Ice(this.level), new Lightning(this.level), new Reflect(this.level), new Water(this.level), new Parry(this.level), new Slash(this.level), new Swing(this.level), new Thrust(this.level), new Focus(this.level)));
         this.playerCards.removeAll(this.player.getCards());
 
         this.monster = new LinkedList<>() {{
-            add(new ArrayList<>(
-                    List.of(new Frog(), new Ghost(), new Gorgon(), new Skeleton(), new Spider(), new Goblin(),
-                            new Rat(), new Mushroomlin())) {
+            add(new ArrayList<>(List.of(new Frog(), new Ghost(), new Gorgon(), new Skeleton(), new Spider(), new Goblin(), new Rat(), new Mushroomlin())) {
             });
-            add(new ArrayList<>(
-                    List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(),
-                            new Mushroomlon(), new WildBoar())));
+            add(new ArrayList<>(List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(), new Mushroomlon(), new WildBoar())));
         }};
+    }
+
+
+    private void shuffleCards() {
+        ShuffleCardRequest shuffle = new ShuffleCardRequest();
+        this.session.requestInput(shuffle);
+        if (!shuffle.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+            shuffle(shuffle.getValue().poll(), shuffle.getValue().poll());
+        }
     }
 }
 
 /**
  * Todo: Heal, Reward, Die/Win,
- * Todo: error when not enough ability points i guess its done
+ * Todo: Break focus
  */

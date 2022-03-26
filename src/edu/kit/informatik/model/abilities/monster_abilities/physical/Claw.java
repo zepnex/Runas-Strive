@@ -2,7 +2,6 @@ package edu.kit.informatik.model.abilities.monster_abilities.physical;
 
 
 import edu.kit.informatik.model.abilities.CardClass;
-import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 import edu.kit.informatik.model.enteties.MonsterType;
 
@@ -33,5 +32,10 @@ public class Claw extends OffensiveCard {
     @Override
     public CardClass getCardClass() {
         return CARD_CLASS;
+    }
+
+    @Override
+    public boolean breaksFocus() {
+        return true;
     }
 }

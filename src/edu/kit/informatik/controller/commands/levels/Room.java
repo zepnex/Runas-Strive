@@ -7,9 +7,10 @@ import java.util.List;
 
 public class Room {
     private final Player player;
-    private final List<Monster> monsters;
+    private List<Monster> monsters;
     private final int stage;
     private final Level level;
+    private Monster toRemove;
 
     public Room(Player player, List<Monster> monsters, Level level, int stage) {
         this.player = player;
@@ -28,9 +29,14 @@ public class Room {
                 this.player.getFocusPoints(), this.player.getDice());
         System.out.println("vs.");
         for (Monster monster : monsters) {
-            System.out.printf("%s (%d HP, %d FP): attempts %s next\n", monster.getName(), monster.getCurrentHp(),
-                    monster.getFocusPoints(), monster.getAbilities().element().toString());
+            if (monster.getCurrentHp() > 0) {
+                System.out.printf("%s (%d HP, %d FP): attempts %s next\n", monster.getName(), monster.getCurrentHp(),
+                        monster.getFocusPoints(), monster.getAbilities().element().toString());
+            } else {
+                toRemove = monster;
+            }
         }
+        monsters.remove(toRemove);
         System.out.println("----------------------------------------");
     }
 
@@ -43,6 +49,6 @@ public class Room {
     }
 
     public List<Monster> getMonsters() {
-        return monsters;
+        return this.monsters;
     }
 }

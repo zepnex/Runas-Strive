@@ -10,6 +10,7 @@ public abstract class Monster extends Entity {
 
     public Monster() {
         super(FOCUS_POINTS);
+        setMaxFocusPoint(Integer.MAX_VALUE);
     }
 
     public abstract Queue<Card> getAbilities();

@@ -34,4 +34,9 @@ public class Scratch extends OffensiveCard {
     public CardClass getCardClass() {
         return CARD_CLASS;
     }
+
+    @Override
+    public boolean breaksFocus() {
+        return true;
+    }
 }

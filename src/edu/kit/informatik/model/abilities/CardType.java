@@ -12,11 +12,6 @@ public enum CardType {
     /**
      *
      */
-    NONE;
-
-
-    private CardType() {
-
-    }
+    NONE
 
 }

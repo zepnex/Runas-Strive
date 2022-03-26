@@ -14,6 +14,7 @@ public abstract class Entity {
     public Entity(int focusPoints) {
         hp = getMaxHp();
         this.focusPoints = focusPoints;
+        isFocused = false;
     }
 
     public void dealDamage(int amount) {
@@ -30,6 +31,9 @@ public abstract class Entity {
 
     public void decreaseFocusPoints(int factor) {
         this.focusPoints -= factor;
+        if (this.isPlayer() && this.focusPoints == 0) {
+            focusPoints++;
+        }
     }
 
     public void increaseFocusPoints() {

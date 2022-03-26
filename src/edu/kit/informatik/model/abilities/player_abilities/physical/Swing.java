@@ -35,4 +35,9 @@ public class Swing extends OffensiveCard {
     public CardClass getCardClass() {
         return CARD_CLASS;
     }
+
+    @Override
+    public boolean breaksFocus() {
+        return true;
+    }
 }

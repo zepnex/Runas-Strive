@@ -7,7 +7,7 @@ import edu.kit.informatik.model.enteties.Monster;
 import java.util.List;
 
 public class TargetRequest extends InputRequest<Monster> {
-    private static final StringBuilder QUESTION = new StringBuilder("Select Runa's target\n");
+    private static final String QUESTION = "Select Runa's target\n";
     private static final String ANSWER = "Enter number [1--%d]";
     private static final String REGEX = "[1-%d]";
     private final List<Monster> monsters;
@@ -29,10 +29,11 @@ public class TargetRequest extends InputRequest<Monster> {
 
     @Override
     public String getQuestion() {
+        StringBuilder builder = new StringBuilder(QUESTION);
         for (int i = 0; i < this.monsters.size(); i++) {
-            QUESTION.append(String.format("%d) %s \n", i + 1, this.monsters.get(i).getName()));
+            builder.append(String.format("%d) %s \n", i + 1, this.monsters.get(i).getName()));
         }
-        return QUESTION.toString();
+        return builder.toString();
     }
 
     @Override

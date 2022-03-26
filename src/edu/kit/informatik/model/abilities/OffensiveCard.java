@@ -24,5 +24,9 @@ public abstract class OffensiveCard extends Card {
         return CARD_TYPE;
     }
 
+    public boolean breaksFocus(){
+        return false;
+    }
+
     public abstract boolean isEffectiveOn(MonsterType monsterType);
 }
