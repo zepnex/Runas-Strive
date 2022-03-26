@@ -5,7 +5,7 @@ import edu.kit.informatik.controller.commands.requests.InputRequest;
 import edu.kit.informatik.model.enteties.CharacterClass;
 
 public class CharacterClassRequest extends InputRequest<CharacterClass> {
-    private static final StringBuilder QUESTION = new StringBuilder("Select Runa's character class\n");
+    private static final String QUESTION = "Select Runa's character class\n";
     private static final String ANSWER = String.format("Enter number [1--%s]:", CharacterClass.values().length);
     private static final String REGEX = String.format("[1-%d]", CharacterClass.values().length);
 
@@ -25,14 +25,14 @@ public class CharacterClassRequest extends InputRequest<CharacterClass> {
 
     @Override
     public String getQuestion() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder(QUESTION);
         for (CharacterClass characterClass : CharacterClass.values()) {
             String name = characterClass.toString();
             builder.append(String.format(
                     "%d) %s\n", characterClass.getCharID(), name.charAt(0) + name.substring(1).toLowerCase()));
 
         }
-        return QUESTION.append(builder).toString();
+        return builder.toString();
     }
 
     @Override

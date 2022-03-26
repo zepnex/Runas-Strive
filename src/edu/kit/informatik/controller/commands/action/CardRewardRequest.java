@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardRewardRequest extends InputRequest<List<Card>> {
-    private static final String QUESTION = "Pick %d card(s) as loot \n";
+    private static final String QUESTION = "Pick %d card(s) as loot\n";
     private static final String ANSWER = "Enter number [1--%d]:";
     private static final String REGEX = "(\\d+,)*\\d";
     private static final String REGEX_RANGE = "[1-%d]";

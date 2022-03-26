@@ -18,7 +18,6 @@ import edu.kit.informatik.model.abilities.player_abilities.physical.Swing;
 import edu.kit.informatik.model.abilities.player_abilities.physical.Thrust;
 import edu.kit.informatik.model.enteties.Entity;
 import edu.kit.informatik.model.enteties.Monster;
-import edu.kit.informatik.model.enteties.MonsterType;
 import edu.kit.informatik.model.enteties.Player;
 import edu.kit.informatik.model.enteties.monster.*;
 
@@ -83,36 +82,37 @@ public class RunasStrive {
             for (Monster monster : currentRoom.getMonsters()) {
                 monster.setCurrentTarget(this.player);
                 monster.getCard();
+                checkFocus(monster);
+                checkCost(monster, monster.getCurrentCard());
+                //todo: check if monster has enough focus to use card
                 evaluateCard(monster, monster.getCurrentCard());
             }
             checkFocus(this.player);
         }
     }
 
-    private boolean checkCost(Monster entity, OffensiveCard card) {
-        return !(entity.getFocusPoints() >= card.getCost());
+    private void checkCost(Monster monster, Card card) {
+        if (card.getCardType().equals(CardType.OFFENSIVE)) {
+            OffensiveCard attack = (OffensiveCard) card;
+            if (monster.getFocusPoints() < attack.getCost()) {
+                monster.getCard();
+                checkCost(monster, monster.getCurrentCard());
+            }
+        }
     }
 
-    //Todo: load next level
+    //Todo: Die for Runa's death
     private void evaluateCard(Entity entity, Card card) {
         if (entity.getCurrentHp() > 0) {
             if (card.getCardType().equals(CardType.OFFENSIVE)) {
-                if (!entity.isPlayer()) checkFocus(entity);
-                if (((OffensiveCard) card).getCost() <= entity.getFocusPoints()) {
-                    if (entity.isPlayer()) {
-                        if (entity.isPlayer() && this.currentRoom.getMonsters().size() > 1) {
-                            requestTarget();
-                        } else {
-                            this.player.setCurrentTarget(currentRoom.getMonsters().get(0));
-                        }
-                    }
-                    evaluateOffensive(entity, (OffensiveCard) card);
-                    if (entity.isPlayer()) checkFocus(entity);
-                }
+                //check for target input
+                if (entity.isPlayer() && this.currentRoom.getMonsters().size() > 1) requestTarget();
+                else if (entity.isPlayer()) entity.setCurrentTarget(this.currentRoom.getMonsters().get(0));
+                //evaluate offensive card
+                evaluateOffensive(entity, (OffensiveCard) card);
             } else if (card.getCardType().equals(CardType.DEFENSIVE)) {
 
-                session.printTurn(entity, card);
-                if (!entity.isPlayer()) checkFocus(entity);
+                this.session.printTurn(entity, card);
 
             } else {
                 session.printTurn(entity, card);
@@ -120,7 +120,7 @@ public class RunasStrive {
                 entity.toggleFocus();
             }
         } else {
-            this.session.printDeath(entity);
+            session.printDeath(entity);
         }
     }
 
@@ -132,40 +132,51 @@ public class RunasStrive {
         }
     }
 
-
     private void evaluateOffensive(Entity entity, OffensiveCard card) {
         Entity target = entity.getCurrentTarget();
         int damage;
         this.session.printTurn(entity, card);
-        if (entity.isPlayer()) {
-            MonsterType enemy = ((Monster) target).getMonsterType();
-            if (card.getCardClass().equals(CardClass.MAGICAL)) {
-                damage = card.getDamage(card.getAbilityLevel(), entity.getFocusPoints());
-                if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
-            } else {
-                damage = card.getDamage(card.getAbilityLevel(), requestDice()) + (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+        //check break focus
+        if (target.isFocused() && card.breaksFocus()) target.toggleFocus();
+        //check monster is able to use its current cards
+        if (card.getCardClass().equals(CardClass.MAGICAL)) {
+            // if magical card
+            damage = card.getDamage(card.getAbilityLevel(), entity.getFocusPoints());
+            if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE))
+                damage -= checkMagicalDefense(entity);
+            if (!entity.isPlayer() && damage < 0) {
+                entity.dealDamage(Math.abs(damage));
+            } else if (damage > 0) {
+                target.dealDamage(damage);
             }
+            entity.decreaseFocusPoints(card.getCost());
         } else {
-            while (checkCost((Monster) entity, card)) {
-                ((Monster) entity).getCard();
-            }
-            damage = card.getDamage(card.getAbilityLevel(), 0);
-            if (card.getCardClass().equals(CardClass.MAGICAL)) entity.decreaseFocusPoints(card.getCost());
+            //if physical card
+            if (entity.isPlayer()) damage = card.getDamage(card.getAbilityLevel(), requestDice());
+            else damage = card.getDamage(card.getAbilityLevel(), 0);
+            if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE))
+                damage = checkPhysicalDefense(entity, damage);
+            if (damage > 0) target.dealDamage(damage);
         }
-        if (card.breaksFocus() && target.isFocused()) {
-            target.toggleFocus();
-        }
-
-        if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
-            DefensiveCard defense = (DefensiveCard) target.getCurrentCard();
-            damage -= defense.getDefense(defense.getAbilityLevel());
-        }
-        if (damage > 0) {
-            target.dealDamage(damage);
+        if (damage > 0)
             this.session.printDamage(target, damage, card.getCardClass().getShortCut());
-        } else if (!entity.isPlayer() && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
-            entity.dealDamage(Math.abs(damage));
+    }
+
+    private int checkPhysicalDefense(Entity attacker, int damage) {
+        DefensiveCard defenderCard = (DefensiveCard) attacker.getCurrentTarget().getCurrentCard();
+        if (defenderCard.getCardClass().equals(CardClass.PHYSICAL)) {
+            damage -= defenderCard.getDefense(defenderCard.getAbilityLevel());
         }
+        if (damage > 0) return damage;
+        return 0;
+    }
+
+    private int checkMagicalDefense(Entity attacker) {
+        DefensiveCard defenderCard = (DefensiveCard) attacker.getCurrentTarget().getCurrentCard();
+        if (defenderCard.getCardClass().equals(CardClass.MAGICAL)) {
+            return defenderCard.getDefense(defenderCard.getAbilityLevel());
+        }
+        return 0;
     }
 
     private void requestReward() {

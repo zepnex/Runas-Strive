@@ -56,7 +56,7 @@ public class Session {
     }
 
     public void printUpgradeDice(Player player) {
-        System.err.printf("Runa upgrades her die to a %dD\n", player.getDice());
+        System.err.printf("Runa upgrades her die to a d%d\n", player.getDice());
 
     }
 
