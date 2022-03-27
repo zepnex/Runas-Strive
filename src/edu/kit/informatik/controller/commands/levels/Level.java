@@ -3,6 +3,7 @@ package edu.kit.informatik.controller.commands.levels;
 import edu.kit.informatik.controller.Session;
 import edu.kit.informatik.model.enteties.Monster;
 import edu.kit.informatik.model.enteties.Player;
+import edu.kit.informatik.model.enteties.monster.MegaSaurus;
 import edu.kit.informatik.model.enteties.monster.SpiderKing;
 
 import java.util.ArrayList;
@@ -34,7 +35,10 @@ public class Level {
             }
             rooms.add(new Room(this.player, roomMonster, this, (int) i));
         }
-        rooms.add(new Room(this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
+        if(level == 1)
+            rooms.add(new Room(this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
+        else
+            rooms.add(new Room(this.player, new ArrayList<>(List.of(new MegaSaurus())), this, 4));
         return rooms;
     }
 

@@ -3,6 +3,7 @@ package edu.kit.informatik.model.abilities;
 
 public abstract class Card {
     private int abilityLevel;
+    private boolean isStarterCard;
 
     public Card(int n) {
         this.abilityLevel = n;
@@ -18,8 +19,16 @@ public abstract class Card {
 
     public abstract CardClass getCardClass();
 
-    public void upgradeCard(){
+    public void upgradeCard() {
         this.abilityLevel++;
+    }
+
+    public void setStarterCard() {
+        isStarterCard = true;
+    }
+
+    public boolean isStarterCard() {
+        return isStarterCard;
     }
 
     @Override

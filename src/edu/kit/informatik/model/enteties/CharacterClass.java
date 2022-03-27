@@ -35,18 +35,26 @@ public enum CharacterClass {
     }
 
     public static List<Card> getCards(CharacterClass playerClass, Player player) {
+        List<Card> cards = new ArrayList<>();
         switch (playerClass) {
             case MAGE:
-                return new ArrayList<Card>(
+                cards = new ArrayList<Card>(
                         List.of(new Focus(player.getAbilityLevel()), new Water(player.getAbilityLevel())));
+                break;
             case WARRIOR:
-                return new ArrayList<Card>(
+                cards = new ArrayList<Card>(
                         List.of(new Thrust(player.getAbilityLevel()), new Parry(player.getAbilityLevel())));
+                break;
             case PALADIN:
-                return new ArrayList<Card>(
+                cards = new ArrayList<Card>(
                         List.of(new Slash(player.getAbilityLevel()), new Reflect(player.getAbilityLevel())));
+                break;
         }
-        throw new IllegalStateException("yeah idk, somehow u broke the game");
+
+        for (Card card : cards) {
+            card.setStarterCard();
+        }
+        return cards;
     }
 
 }

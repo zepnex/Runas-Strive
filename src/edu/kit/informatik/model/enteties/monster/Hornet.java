@@ -4,7 +4,7 @@ package edu.kit.informatik.model.enteties.monster;
 import edu.kit.informatik.model.abilities.Card;
 import edu.kit.informatik.model.abilities.Focus;
 import edu.kit.informatik.model.abilities.monster_abilities.magical.Fire;
-import edu.kit.informatik.model.abilities.monster_abilities.physical.Bite;
+import edu.kit.informatik.model.abilities.monster_abilities.physical.Scratch;
 import edu.kit.informatik.model.enteties.Monster;
 import edu.kit.informatik.model.enteties.MonsterType;
 
@@ -18,7 +18,7 @@ public class Hornet extends Monster {
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.FIRE;
     private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Bite(2), new Focus(2), new Fire(1), new Fire(2)));
+        = new LinkedList<>(List.of(new Scratch(2), new Focus(2), new Fire(1), new Fire(2)));
 
 
     @Override

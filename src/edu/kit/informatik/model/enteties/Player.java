@@ -61,10 +61,21 @@ public class Player extends Entity {
         }
     }
 
+    public int getMaxDice() {
+        return MAX_DICE;
+    }
+
+    public CharacterClass getCharacterClass() {
+        return characterClass;
+    }
 
     @Override
     public boolean isPlayer() {
         return true;
     }
 
+    @Override
+    public void decreaseFocusPoints(int factor) {
+        setFocusPoints(Math.max(1, getFocusPoints() - 1));
+    }
 }

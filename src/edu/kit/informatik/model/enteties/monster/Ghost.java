@@ -15,7 +15,7 @@ public class Ghost extends Monster {
     private static final String NAME = "Ghost";
     private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.ICE;
-    private final static Queue<Card> ABILITIES
+    private static final Queue<Card> ABILITIES
         = new LinkedList<>(List.of(new Focus(1), new Ice(1)));
 
 

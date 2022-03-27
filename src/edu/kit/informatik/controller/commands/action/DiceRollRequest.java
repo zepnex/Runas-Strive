@@ -17,14 +17,24 @@ public class DiceRollRequest extends InputRequest<Integer> {
     public void process(String input) {
         if (input.equals("quit")) {
             setAnswerFlag(AnswerFlag.QUIT);
-        } else {
-            if (input.matches(String.format(REGEX, dice))) {
-                setAnswerFlag(AnswerFlag.VALID);
-                setValue(Integer.parseInt(input));
-            } else {
-                setAnswerFlag(AnswerFlag.UNUSABLE);
-            }
+            return;
         }
+        if (validInput(input)) {
+            setAnswerFlag(AnswerFlag.VALID);
+            setValue(Integer.parseInt(input));
+        } else {
+            setAnswerFlag(AnswerFlag.UNUSABLE);
+        }
+    }
+
+    private boolean validInput(String input) {
+        try {
+            int number = Integer.parseInt(input);
+            if (number > 0 && number <= dice) return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return false;
     }
 
     @Override

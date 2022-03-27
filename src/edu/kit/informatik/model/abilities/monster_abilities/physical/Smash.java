@@ -18,7 +18,7 @@ public class Smash extends OffensiveCard {
 
     @Override
     public int getDamage(int n, int w) {
-        return 10 * n;
+        return 8 * n;
     }
 
     @Override

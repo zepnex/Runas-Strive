@@ -5,14 +5,14 @@ import edu.kit.informatik.controller.commands.requests.InputRequest;
 import edu.kit.informatik.model.abilities.Card;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CardRewardRequest extends InputRequest<List<Card>> {
     private static final String QUESTION = "Pick %d card(s) as loot\n";
     private static final String MULTIPLE_ANSWER = "Enter numbers [1--%d] separated by comma:";
-    private static final String SINGLE_ANSWER = "Enter number [1--%d]";
-    private static final String REGEX = "(\\d+,)*\\d";
-    private static final String REGEX_RANGE = "[1-%d]";
+    private static final String SINGLE_ANSWER = "Enter number [1--%d]:";
     private final List<Card> choices;
 
     public CardRewardRequest(List<Card> choices) {
@@ -27,27 +27,44 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
             setAnswerFlag(AnswerFlag.QUIT);
             return;
         }
-        if (input.matches(REGEX)) {
-            String[] numbers = input.split(",");
-            for (String number : numbers) {
-                if (number.matches(String.format(REGEX_RANGE, choices.size()))) {
+        String[] answer = input.split(",");
+
+        if (answer.length == Math.ceil(choices.size() / 2d) && !input.endsWith(",")) {
+            if (validInput(answer)) {
+                for (String number : answer) {
                     chosenCards.add(choices.get(Integer.parseInt(number) - 1));
                 }
+                setAnswerFlag(AnswerFlag.VALID);
+                setValue(chosenCards);
+            } else {
+                setAnswerFlag(AnswerFlag.UNUSABLE);
             }
-        } else {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
-        }
-        if (chosenCards.size() == choices.size() / 2) {
-            setAnswerFlag(AnswerFlag.VALID);
-            setValue(chosenCards);
         } else {
             setAnswerFlag(AnswerFlag.UNUSABLE);
         }
     }
 
+    private boolean validInput(String[] input) {
+        //check for same number of input
+        try {
+            Set<Integer> set = new HashSet<>();
+            for (String s : input) {
+                int number = Integer.parseInt(s);
+                if (!(number > 0 && number <= choices.size()) || set.contains(number)) {
+
+                    return false;
+                }
+                set.add(number);
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     @Override
     public String getQuestion() {
-        StringBuilder builder = new StringBuilder(String.format(QUESTION, choices.size() / 2));
+        StringBuilder builder = new StringBuilder(String.format(QUESTION, (int) Math.ceil(choices.size() / 2d)));
         for (int i = 0; i < choices.size(); i++) {
             builder.append(String.format("%d) %s\n", i + 1, choices.get(i).toString()));
         }

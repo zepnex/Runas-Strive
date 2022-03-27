@@ -7,19 +7,24 @@ import edu.kit.informatik.model.enteties.CharacterClass;
 public class CharacterClassRequest extends InputRequest<CharacterClass> {
     private static final String QUESTION = "Select Runa's character class\n";
     private static final String ANSWER = String.format("Enter number [1--%s]:", CharacterClass.values().length);
-    private static final String REGEX = String.format("[1-%d]", CharacterClass.values().length);
 
     @Override
     public void process(String input) {
         if (input.equals("quit")) {
             setAnswerFlag(AnswerFlag.QUIT);
         } else {
-            if (input.matches(REGEX)) {
-                setAnswerFlag(AnswerFlag.VALID);
-                setValue(CharacterClass.getCharacter(Integer.parseInt(input)));
-            } else {
+            try {
+                int number = Integer.parseInt(input);
+                if (number > 0 && number <= CharacterClass.values().length) {
+                    setAnswerFlag(AnswerFlag.VALID);
+                    setValue(CharacterClass.getCharacter(Integer.parseInt(input)));
+                    return;
+                }
+            } catch (NumberFormatException e) {
                 setAnswerFlag(AnswerFlag.UNUSABLE);
             }
+            setAnswerFlag(AnswerFlag.UNUSABLE);
+
         }
     }
 

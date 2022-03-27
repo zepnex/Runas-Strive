@@ -5,16 +5,12 @@ import edu.kit.informatik.controller.commands.requests.InputRequest;
 import edu.kit.informatik.model.abilities.Card;
 import edu.kit.informatik.model.enteties.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class HealRequest extends InputRequest<List<Card>> {
+public class HealRequest extends InputRequest<List<Integer>> {
     private static final String QUESTION = "Runa (%d/%d HP) can discard ability cards for healing (or none)\n";
     private static final String ANSWER_SINGLE = "Enter number [1--2]:";
     private static final String ANSWER_MULTIPLE = "Enter numbers [1--%d] separated by comma:";
-    private static final String REGEX = "(\\d+,)*\\d";
-    private static final String SINGLE_REGEX = "[1-2]";
-    private static final String MULTIPLE_REGEX = "[1-%d]";
 
     private final List<Card> playerCards;
     private final Player player;
@@ -35,7 +31,7 @@ public class HealRequest extends InputRequest<List<Card>> {
             setValue(new ArrayList<>());
             return;
         }
-        if (input.matches(REGEX)) {
+        if (!input.endsWith(",")) {
             if (playerCards.size() == 2) {
                 singleAnswer(input);
             } else {
@@ -47,26 +43,43 @@ public class HealRequest extends InputRequest<List<Card>> {
     }
 
     private void singleAnswer(String input) {
-        if (!input.matches(SINGLE_REGEX) && !(input.split(",").length == 1)) {
+        if (!validInput(input) || !(input.split(",").length >= 1)) {
             setAnswerFlag(AnswerFlag.UNUSABLE);
             return;
         }
         setAnswerFlag(AnswerFlag.VALID);
-        setValue(new ArrayList<>(List.of(playerCards.get(Integer.parseInt(input) - 1))));
+        setValue(new ArrayList<>(List.of(Integer.parseInt(input) - 1)));
 
+    }
+
+    private boolean validInput(String input) {
+        try {
+            Set<Integer> set = new HashSet<>();
+            for (String s : input.split(",")) {
+                int number = Integer.parseInt(s);
+                if (!(number > 0 && number <= playerCards.size()) || set.contains(number)) {
+                    return false;
+                }
+                set.add(number);
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private void multipleAnswer(String input) {
         String[] split = input.split(",");
-        if (!input.matches(String.format(MULTIPLE_REGEX, playerCards.size())) && !(split.length < playerCards.size())) {
+        if (!validInput(input) || (split.length == playerCards.size())) {
             setAnswerFlag(AnswerFlag.UNUSABLE);
             return;
         }
         setAnswerFlag(AnswerFlag.VALID);
-        List<Card> cards = new ArrayList<>();
+        List<Integer> cards = new ArrayList<>();
         for (String index : split) {
-            cards.add(playerCards.get(Integer.parseInt(index) - 1));
+            cards.add(Integer.parseInt(index) - 1);
         }
+        Collections.sort(cards);
         setValue(cards);
         setAnswerFlag(AnswerFlag.VALID);
     }

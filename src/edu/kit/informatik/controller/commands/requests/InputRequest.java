@@ -11,7 +11,8 @@ public abstract class InputRequest<T> {
         return value;
     }
 
-    protected void setValue(T value) {
+
+    public void setValue(T value) {
         this.value = value;
     }
 

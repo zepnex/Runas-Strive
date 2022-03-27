@@ -19,25 +19,8 @@ public class Room {
         this.stage = stage;
     }
 
-    public void printIntro() {
-        System.out.printf("Runa enters Stage %d of Level %d\n", stage, level.getLevel());
-    }
-
-    public void printEncounter() {
-        System.out.println("----------------------------------------");
-        System.out.printf("Runa (%d/%d HP, %d/%d FP)\n", this.player.getCurrentHp(), this.player.getMaxHp(),
-                this.player.getFocusPoints(), this.player.getDice());
-        System.out.println("vs.");
-        for (Monster monster : monsters) {
-            if (monster.getCurrentHp() > 0) {
-                System.out.printf("%s (%d HP, %d FP): attempts %s next\n", monster.getName(), monster.getCurrentHp(),
-                        monster.getFocusPoints(), monster.getAbilities().element().toString());
-            } else {
-                toRemove = monster;
-            }
-        }
-        monsters.remove(toRemove);
-        System.out.println("----------------------------------------");
+    public void removeMonster(Monster monster) {
+        monsters.remove(monster);
     }
 
 

@@ -38,9 +38,18 @@ public abstract class Entity {
         }
     }
 
-    public void increaseFocusPoints() {
-        if (this.focusPoints < maxFocusPoint)
-            this.focusPoints += 1;
+    public int increaseFocusPoints(int factor) {
+        int free = getMaxFocusPoint() - this.focusPoints;
+        if (free >= factor) {
+            this.focusPoints += factor;
+        } else {
+            this.focusPoints = this.getMaxFocusPoint();
+        }
+        return Math.min(free, factor);
+    }
+
+    public void setFocusPoints(int focusPoints) {
+        this.focusPoints = focusPoints;
     }
 
     public int getCurrentHp() {
