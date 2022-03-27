@@ -9,7 +9,8 @@ import java.util.List;
 
 public class CardRewardRequest extends InputRequest<List<Card>> {
     private static final String QUESTION = "Pick %d card(s) as loot\n";
-    private static final String ANSWER = "Enter number [1--%d]:";
+    private static final String MULTIPLE_ANSWER = "Enter numbers [1--%d] separated by comma:";
+    private static final String SINGLE_ANSWER = "Enter number [1--%d]";
     private static final String REGEX = "(\\d+,)*\\d";
     private static final String REGEX_RANGE = "[1-%d]";
     private final List<Card> choices;
@@ -56,6 +57,8 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
 
     @Override
     public String getAnswer() {
-        return String.format(ANSWER, choices.size());
+        if (choices.size() == 2)
+            return String.format(SINGLE_ANSWER, choices.size());
+        return String.format(MULTIPLE_ANSWER, choices.size());
     }
 }

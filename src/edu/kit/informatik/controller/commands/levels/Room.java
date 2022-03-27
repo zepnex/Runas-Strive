@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Room {
     private final Player player;
-    private List<Monster> monsters;
+    private final List<Monster> monsters;
     private final int stage;
     private final Level level;
     private Monster toRemove;

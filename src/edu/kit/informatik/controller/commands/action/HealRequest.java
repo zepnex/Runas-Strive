@@ -11,7 +11,7 @@ import java.util.List;
 public class HealRequest extends InputRequest<List<Card>> {
     private static final String QUESTION = "Runa (%d/%d HP) can discard ability cards for healing (or none)\n";
     private static final String ANSWER_SINGLE = "Enter number [1--2]:";
-    private static final String ANSWER_MULTIPLE = "Enter numbers [1--%d] seperated by comma:";
+    private static final String ANSWER_MULTIPLE = "Enter numbers [1--%d] separated by comma:";
     private static final String REGEX = "(\\d+,)*\\d";
     private static final String SINGLE_REGEX = "[1-2]";
     private static final String MULTIPLE_REGEX = "[1-%d]";
@@ -28,6 +28,11 @@ public class HealRequest extends InputRequest<List<Card>> {
     public void process(String input) {
         if (input.equals("quit")) {
             setAnswerFlag(AnswerFlag.QUIT);
+            return;
+        }
+        if (input.isEmpty()) {
+            setAnswerFlag(AnswerFlag.VALID);
+            setValue(new ArrayList<>());
             return;
         }
         if (input.matches(REGEX)) {

@@ -31,7 +31,7 @@ public class TargetRequest extends InputRequest<Monster> {
     public String getQuestion() {
         StringBuilder builder = new StringBuilder(QUESTION);
         for (int i = 0; i < this.monsters.size(); i++) {
-            builder.append(String.format("%d) %s \n", i + 1, this.monsters.get(i).getName()));
+            builder.append(String.format("%d) %s\n", i + 1, this.monsters.get(i).getName()));
         }
         return builder.toString();
     }

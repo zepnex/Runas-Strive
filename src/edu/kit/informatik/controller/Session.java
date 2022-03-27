@@ -7,6 +7,7 @@ import edu.kit.informatik.model.abilities.Card;
 import edu.kit.informatik.model.enteties.Entity;
 import edu.kit.informatik.model.enteties.Player;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Session {
@@ -37,7 +38,7 @@ public class Session {
             System.out.println(request.getAnswer());
             request.process(this.scanner.nextLine());
             if (request.getAnswerFlag().equals(AnswerFlag.QUIT)) {
-                return;
+                System.exit(0);
             }
         }
     }
@@ -57,7 +58,12 @@ public class Session {
 
     public void printUpgradeDice(Player player) {
         System.out.printf("Runa upgrades her die to a d%d\n", player.getDice());
+    }
 
+    public void printCardReceptions(List<Card> cards) {
+        for (Card card : cards) {
+            System.out.printf("Runa gets %s\n", card.toString());
+        }
     }
 
     public void printHealing(int healing) {
