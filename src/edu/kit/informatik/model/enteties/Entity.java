@@ -21,8 +21,10 @@ public abstract class Entity {
         hp -= amount;
     }
 
-    public void heal(int amount) {
+    public int heal(int amount) {
+        int temp = hp;
         hp = Math.min(hp + amount, getMaxHp());
+        return hp - temp;
     }
 
     public int getFocusPoints() {

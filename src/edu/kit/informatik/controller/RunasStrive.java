@@ -18,6 +18,7 @@ import edu.kit.informatik.model.abilities.player_abilities.physical.Swing;
 import edu.kit.informatik.model.abilities.player_abilities.physical.Thrust;
 import edu.kit.informatik.model.enteties.Entity;
 import edu.kit.informatik.model.enteties.Monster;
+import edu.kit.informatik.model.enteties.MonsterType;
 import edu.kit.informatik.model.enteties.Player;
 import edu.kit.informatik.model.enteties.monster.*;
 
@@ -38,7 +39,6 @@ public class RunasStrive {
     private Level currentLevel;
     private Room currentRoom;
     private AnswerFlag status = AnswerFlag.VALID;
-
 
     public RunasStrive(Session session, Player player) {
         this.session = session;
@@ -65,13 +65,15 @@ public class RunasStrive {
         loadRoom();
     }
 
-    void loadRoom() {
+    private void loadRoom() {
         for (int i = 0; i < 4; i++) {
             currentRoom = currentLevel.loadRoom();
             combat();
             requestReward();
+            requestHealing();
         }
     }
+
 
     private void combat() {
         this.currentRoom.printIntro();
@@ -80,12 +82,14 @@ public class RunasStrive {
             requestCard();
             evaluateCard(this.player, this.player.getCurrentCard());
             for (Monster monster : currentRoom.getMonsters()) {
-                monster.setCurrentTarget(this.player);
-                monster.getCard();
-                checkFocus(monster);
-                checkCost(monster, monster.getCurrentCard());
-                //todo: check if monster has enough focus to use card
-                evaluateCard(monster, monster.getCurrentCard());
+
+                    monster.setCurrentTarget(this.player);
+                    monster.getCard();
+                    if(monster.getCurrentHp()>0) checkFocus(monster);
+                    checkCost(monster, monster.getCurrentCard());
+                    //todo: check if monster has enough focus to use card
+                    evaluateCard(monster, monster.getCurrentCard());
+
             }
             checkFocus(this.player);
         }
@@ -111,9 +115,7 @@ public class RunasStrive {
                 //evaluate offensive card
                 evaluateOffensive(entity, (OffensiveCard) card);
             } else if (card.getCardType().equals(CardType.DEFENSIVE)) {
-
                 this.session.printTurn(entity, card);
-
             } else {
                 session.printTurn(entity, card);
                 checkFocus(entity);
@@ -142,23 +144,35 @@ public class RunasStrive {
         if (card.getCardClass().equals(CardClass.MAGICAL)) {
             // if magical card
             damage = card.getDamage(card.getAbilityLevel(), entity.getFocusPoints());
+            if (entity.isPlayer()) {
+                MonsterType enemy = ((Monster) target).getMonsterType();
+                //calculate damage
+                damage += (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+            }
             if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE))
+                //check if target has a defensive card
                 damage -= checkMagicalDefense(entity);
             if (!entity.isPlayer() && damage < 0) {
+                //deal damage to monster because of reflection card
                 entity.dealDamage(Math.abs(damage));
             } else if (damage > 0) {
                 target.dealDamage(damage);
             }
+            //decrease focus points
             entity.decreaseFocusPoints(card.getCost());
         } else {
             //if physical card
             if (entity.isPlayer()) damage = card.getDamage(card.getAbilityLevel(), requestDice());
+            //calculate damage for player
             else damage = card.getDamage(card.getAbilityLevel(), 0);
+            //check if target has a defensive card
             if (target.getCurrentCard() != null && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE))
+                //calculate damage with defensive card
                 damage = checkPhysicalDefense(entity, damage);
             if (damage > 0) target.dealDamage(damage);
         }
         if (damage > 0)
+            //print damage
             this.session.printDamage(target, damage, card.getCardClass().getShortCut());
     }
 
@@ -167,8 +181,7 @@ public class RunasStrive {
         if (defenderCard.getCardClass().equals(CardClass.PHYSICAL)) {
             damage -= defenderCard.getDefense(defenderCard.getAbilityLevel());
         }
-        if (damage > 0) return damage;
-        return 0;
+        return Math.max(damage, 0);
     }
 
     private int checkMagicalDefense(Entity attacker) {
@@ -191,6 +204,15 @@ public class RunasStrive {
             }
         }
 
+    }
+
+    private void requestHealing() {
+        HealRequest heal = new HealRequest(this.player, this.player.getCards());
+        this.session.requestInput(heal);
+        if (!heal.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+            this.player.getCards().removeAll(heal.getValue());
+            this.session.printHealing(this.player.heal(10 * heal.getValue().size()));
+        }
     }
 
     private void requestCardReward() {

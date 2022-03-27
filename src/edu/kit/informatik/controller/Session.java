@@ -56,12 +56,12 @@ public class Session {
     }
 
     public void printUpgradeDice(Player player) {
-        System.err.printf("Runa upgrades her die to a d%d\n", player.getDice());
+        System.out.printf("Runa upgrades her die to a d%d\n", player.getDice());
 
     }
 
-    public void printAddCard() {
-
+    public void printHealing(int healing) {
+        System.out.printf("Runa gains %d health\n", healing);
     }
 
     public void printDeath(Entity entity) {
