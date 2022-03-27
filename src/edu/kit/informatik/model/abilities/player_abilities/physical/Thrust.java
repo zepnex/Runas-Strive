@@ -17,8 +17,8 @@ public class Thrust extends OffensiveCard {
     }
 
     @Override
-    public int getDamage(int n, int w) {
-        return (6 * n + w) + (w > 5 ? 4 * n : 0);
+    public int getDamage(int w) {
+        return (6 * this.getAbilityLevel() + w) + (w > 5 ? 4 * this.getAbilityLevel() : 0);
     }
 
     @Override

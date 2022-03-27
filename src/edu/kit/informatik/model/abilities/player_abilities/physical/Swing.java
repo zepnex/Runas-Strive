@@ -17,8 +17,8 @@ public class Swing extends OffensiveCard {
 
     //TODO: Bricht irgendwie Fokus
     @Override
-    public int getDamage(int n, int w) {
-        return 5 * n + w;
+    public int getDamage(int w) {
+        return 5 * this.getAbilityLevel() + w;
     }
 
     @Override

@@ -18,8 +18,8 @@ public class Water extends OffensiveCard {
     }
 
     @Override
-    public int getDamage(int n, int w) {
-        return 8 * n + 2;
+    public int getDamage(int w) {
+        return 8 * this.getAbilityLevel() + 2;
     }
 
     @Override

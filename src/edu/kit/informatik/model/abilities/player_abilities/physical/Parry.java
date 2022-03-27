@@ -17,8 +17,8 @@ public class Parry extends DefensiveCard {
     }
 
     @Override
-    public int getDefense(int n) {
-        return 7 * n;
+    public int getDefense() {
+        return 7 * this.getAbilityLevel();
     }
 
     @Override

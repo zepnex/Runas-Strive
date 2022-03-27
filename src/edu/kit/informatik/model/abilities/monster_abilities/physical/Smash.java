@@ -17,8 +17,8 @@ public class Smash extends OffensiveCard {
     }
 
     @Override
-    public int getDamage(int n, int w) {
-        return 8 * n;
+    public int getDamage(int w) {
+        return 8 * this.getAbilityLevel();
     }
 
     @Override

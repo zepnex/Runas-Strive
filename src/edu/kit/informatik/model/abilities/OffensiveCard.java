@@ -11,7 +11,7 @@ public abstract class OffensiveCard extends Card {
         super(n);
     }
 
-    public abstract int getDamage(int n, int factor);
+    public abstract int getDamage(int factor);
 
     protected void setCost(int cost) {
         this.cost = cost;

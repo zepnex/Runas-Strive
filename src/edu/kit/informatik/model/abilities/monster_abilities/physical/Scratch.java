@@ -18,8 +18,8 @@ public class Scratch extends OffensiveCard {
     //TODO: Bricht Focus
 
     @Override
-    public int getDamage(int n, int w) {
-        return 5 * n;
+    public int getDamage(int w) {
+        return 5 * this.getAbilityLevel();
     }
 
     @Override

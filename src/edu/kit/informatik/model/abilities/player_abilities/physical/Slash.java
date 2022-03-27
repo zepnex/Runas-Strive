@@ -19,8 +19,8 @@ public class Slash extends OffensiveCard {
 
     //TODO: Bricht irgendwie Focus
     @Override
-    public int getDamage(int n, int w) {
-        return (4 * n) + w;
+    public int getDamage(int w) {
+        return (4 * this.getAbilityLevel()) + w;
     }
 
     @Override

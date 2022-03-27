@@ -17,8 +17,8 @@ public class Bite extends OffensiveCard {
     }
 
     @Override
-    public int getDamage(int n, int w) {
-        return 10 * n;
+    public int getDamage(int w) {
+        return 10 * this.getAbilityLevel();
     }
 
     @Override

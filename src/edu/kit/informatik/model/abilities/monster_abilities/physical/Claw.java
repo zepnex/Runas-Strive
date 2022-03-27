@@ -17,8 +17,8 @@ public class Claw extends OffensiveCard {
     //TODO: Bricht Focus von runa
 
     @Override
-    public int getDamage(int n, int w) {
-        return 6 * n;
+    public int getDamage( int w) {
+        return 6 * this.getAbilityLevel();
     }
 
     @Override

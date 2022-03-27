@@ -18,8 +18,8 @@ public class Lightning extends OffensiveCard {
 
 
     @Override
-    public int getDamage(int n, int w) {
-        return 14 * n + 2;
+    public int getDamage(int w) {
+        return 14 * this.getAbilityLevel() + 2;
     }
 
     @Override

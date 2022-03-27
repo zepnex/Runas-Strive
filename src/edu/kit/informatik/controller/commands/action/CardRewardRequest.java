@@ -9,12 +9,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class represents a request for a card reward.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class CardRewardRequest extends InputRequest<List<Card>> {
     private static final String QUESTION = "Pick %d card(s) as loot\n";
     private static final String MULTIPLE_ANSWER = "Enter numbers [1--%d] separated by comma:";
     private static final String SINGLE_ANSWER = "Enter number [1--%d]:";
     private final List<Card> choices;
 
+    /**
+     * Creates a new CardRewardRequest.
+     * @param choices the list of cards that can be chosen
+     */
     public CardRewardRequest(List<Card> choices) {
         this.choices = choices;
     }

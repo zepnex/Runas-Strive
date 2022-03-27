@@ -17,8 +17,8 @@ public class Pierce extends OffensiveCard {
     }
 
     @Override
-    public int getDamage(int n, int w) {
-        return (7 * n + w) + (w > 5 ? 5 * n : 0);
+    public int getDamage(int w) {
+        return (7 * this.getAbilityLevel() + w) + (w > 5 ? 5 * this.getAbilityLevel() : 0);
     }
 
     @Override

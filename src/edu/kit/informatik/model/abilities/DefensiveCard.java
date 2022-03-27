@@ -7,7 +7,7 @@ public abstract class DefensiveCard extends Card {
         super(n);
     }
 
-    public abstract int getDefense(int n);
+    public abstract int getDefense();
 
     @Override
     public CardType getCardType() {

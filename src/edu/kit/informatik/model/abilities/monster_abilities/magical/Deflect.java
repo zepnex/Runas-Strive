@@ -16,8 +16,8 @@ public class Deflect extends DefensiveCard {
     }
 
     @Override
-    public int getDefense(int n) {
-        return 11 * n + 2;
+    public int getDefense() {
+        return 11 * this.getAbilityLevel() + 2;
     }
 
     @Override

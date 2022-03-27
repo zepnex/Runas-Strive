@@ -17,8 +17,8 @@ public class Ice extends OffensiveCard {
     }
 
     @Override
-    public int getDamage(int n, int f) {
-        return (2 * n + 4) * f + 2;
+    public int getDamage(int f) {
+        return (2 * this.getAbilityLevel() + 4) * f + 2;
     }
 
     @Override

@@ -15,8 +15,8 @@ public class Reflect extends DefensiveCard {
     }
 
     @Override
-    public int getDefense(int n) {
-        return 10 * n;
+    public int getDefense() {
+        return 10 * this.getAbilityLevel();
     }
 
     @Override

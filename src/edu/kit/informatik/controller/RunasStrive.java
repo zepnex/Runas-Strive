@@ -150,73 +150,60 @@ public class RunasStrive {
     }
 
 
-    private void evaluateOffensive(Entity entity, OffensiveCard card) throws QuitException {
-        CardClass cardClass;
-        Entity target = entity.getCurrentTarget();
-        this.session.printTurn(entity, card);
+    private void evaluateOffensive(Entity attacker, OffensiveCard card) throws QuitException {
+        CardClass cardClass = card.getCardClass();
+        Entity target = attacker.getCurrentTarget();
+        this.session.printTurn(attacker, card);
         //check break focus
         if (target.isFocused() && card.breaksFocus()) target.toggleFocus();
         //check monster is able to use its current cards
         int damage;
         boolean reflect = false;
-        if (card.getCardClass().equals(CardClass.MAGICAL)) {
-            cardClass = CardClass.MAGICAL;
-            if (entity.isPlayer()) {
-                damage = card.getDamage(card.getAbilityLevel(), entity.getFocusPoints());
+        if (cardClass.equals(CardClass.MAGICAL)) {
+            // card is magical
+            if (attacker.isPlayer()) {
+                damage = card.getDamage(attacker.getFocusPoints());
                 MonsterType enemy = ((Monster) target).getMonsterType();
                 //calculate damage
                 damage += (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
             } else {
-                damage = card.getDamage(card.getAbilityLevel(), 0);
+                damage = card.getDamage(0);
             }
-            if (target.getCurrentTarget() != null && target.getCurrentCard().getCardClass() == CardClass.MAGICAL && target.getCurrentCard().getCardType() == CardType.DEFENSIVE) {
-                if (target.isPlayer()) {
-                    // reflect
-                    damage = calcDamageAfterDefense(entity, damage);
-                    reflect = true;
-                } else {
-                    //defend karte von monster
-                    damage = calcDamageAfterDefense(entity, damage);
-                }
-            }
-            entity.decreaseFocusPoints(card.getAbilityLevel());
-            // keine defend karte
+            attacker.decreaseFocusPoints(card.getAbilityLevel());
         } else {
-            // Karte ist physicall
+            // Card is physical
             cardClass = CardClass.PHYSICAL;
-            if (entity.isPlayer())
-                damage = card.getDamage(card.getAbilityLevel(), requestDice());
+            if (attacker.isPlayer())
+                damage = card.getDamage(requestDice());
             else
-                damage = card.getDamage(card.getAbilityLevel(), 0);
+                damage = card.getDamage(0);
             // Physical card
-            if (target.getCurrentCard() != null && target.getCurrentCard().getCardClass().equals(CardClass.PHYSICAL) && target.getCurrentCard().getCardType().equals(CardType.DEFENSIVE)) {
-                //target kann sich defenden
-                damage = calcDamageAfterDefense(entity, damage);
-            }
+        }
+        // calculate defense
+        if (target.getCurrentCard() != null && target.getCurrentCard().getCardType() == CardType.DEFENSIVE &&
+                attacker.getCurrentCard().getCardClass() == target.getCurrentCard().getCardClass()) {
+            damage = calcDamageAfterDefense(attacker, damage);
+            reflect = target.getCurrentCard().getName().equals("Reflect");
         }
         if (reflect) {
             if (damage > 0) {
-                // entity und target bekommen damage
-                entity.dealDamage(Math.abs(calcDamageAfterDefense(entity, 0)));
-                target.dealDamage(damage);
+                // attacker and target receive damage
+                attacker.dealDamage(Math.abs(calcDamageAfterDefense(attacker, 0)));
                 this.session.printDamage(target, damage, cardClass.getShortCut());
                 checkDeath(target);
-                this.session.printDamage(entity, Math.abs(calcDamageAfterDefense(entity, 0)), cardClass.getShortCut());
+                this.session.printDamage(attacker, Math.abs(calcDamageAfterDefense(attacker, 0)), cardClass.getShortCut());
             } else {
-                entity.dealDamage(card.getDamage(card.getAbilityLevel(), 0));
-                this.session.printDamage(entity, card.getDamage(card.getAbilityLevel(), 0), cardClass.getShortCut());
-            }
-        } else {
-            if (damage > 0) {
-                // target deal damage
-                target.dealDamage(damage);
+                // only attacker receives damage
+                attacker.dealDamage(card.getDamage(0));
+                this.session.printDamage(attacker, card.getDamage(0), cardClass.getShortCut());
             }
         }
+        target.dealDamage(damage);
         //jetzt alles ausgeben
         if (!reflect)
             this.session.printDamage(target, damage, cardClass.getShortCut());
         checkDeath(target);
-        checkDeath(entity);
+        checkDeath(attacker);
 
     }
 
@@ -232,7 +219,7 @@ public class RunasStrive {
 
     private int calcDamageAfterDefense(Entity attacker, int damage) {
         DefensiveCard defense = (DefensiveCard) attacker.getCurrentTarget().getCurrentCard();
-        return damage - defense.getDefense(defense.getAbilityLevel());
+        return damage - defense.getDefense();
     }
 
     private void requestReward() throws QuitException {
@@ -269,7 +256,6 @@ public class RunasStrive {
     }
 
     private void requestCardReward() throws QuitException {
-        //todo: when level to rework the card to level 2
         List<Card> options = this.playerCards.subList(0, room > 1 ? Math.min(4, this.playerCards.size()) : 2);
         CardRewardRequest cardRewardRequest = new CardRewardRequest(options);
         this.session.requestInput(cardRewardRequest);
@@ -310,8 +296,6 @@ public class RunasStrive {
         }
     }
 
-
-    //Todo: initCards und shuffle wo anders hin
     private void shuffle(int seedPlayer, int seedMonster) {
         Collections.shuffle(this.playerCards, new Random(seedPlayer));
         Collections.shuffle(this.monster.element(), new Random(seedMonster));
@@ -342,9 +326,5 @@ public class RunasStrive {
         } else {
             status = AnswerFlag.QUIT;
         }
-    }
-
-    public AnswerFlag getStatus() {
-        return status;
     }
 }

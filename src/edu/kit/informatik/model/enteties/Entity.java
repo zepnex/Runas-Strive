@@ -18,7 +18,8 @@ public abstract class Entity {
     }
 
     public void dealDamage(int amount) {
-        hp -= amount;
+
+        hp -= Math.min(0,amount);
     }
 
     public int heal(int amount) {
