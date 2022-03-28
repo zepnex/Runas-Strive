@@ -6,14 +6,25 @@ import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 import edu.kit.informatik.model.enteties.MonsterType;
 
+/**
+ * This class represents a Ice card.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Ice extends OffensiveCard {
     private static final String CARD_NAME = "Ice";
     private static final CardClass CARD_CLASS = CardClass.MAGICAL;
     private static final int COST = 1;
 
+    /**
+     * Constructor for the Ice card.
+     *
+     * @param n the ability level of the card
+     */
     public Ice(int n) {
         super(n);
-        setCost(COST);
+
     }
 
     @Override

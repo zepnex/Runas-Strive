@@ -50,10 +50,6 @@ public enum CharacterClass {
                         List.of(new Slash(player.getAbilityLevel()), new Reflect(player.getAbilityLevel())));
                 break;
         }
-
-        for (Card card : cards) {
-            card.setStarterCard();
-        }
         return cards;
     }
 

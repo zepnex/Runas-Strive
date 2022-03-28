@@ -6,12 +6,21 @@ import edu.kit.informatik.model.abilities.Card;
 
 import java.util.List;
 
+/**
+ * This class represents a request to select a card.
+ * @author unyrg
+ * @version 1.0
+ */
 public class SelectCardRequest extends InputRequest<Card> {
     private static final String QUESTION = "Select card to play\n";
     private static final String ANSWER = "Enter number [1--%d]:";
     private static final String REGEX = "[1-%d]";
     private final List<Card> cards;
 
+    /**
+     * Constructor for the SelectCardRequest.
+     * @param cards the cards to select from
+     */
     public SelectCardRequest(List<Card> cards) {
         this.cards = cards;
     }
@@ -25,7 +34,7 @@ public class SelectCardRequest extends InputRequest<Card> {
                 setAnswerFlag(AnswerFlag.VALID);
                 setValue(this.cards.get(Integer.parseInt(input) - 1));
             } else {
-                setAnswerFlag(AnswerFlag.UNUSABLE);
+                setAnswerFlag(AnswerFlag.INVALID);
             }
         }
     }

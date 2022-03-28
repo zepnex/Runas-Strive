@@ -1,21 +1,54 @@
 package edu.kit.informatik.controller;
 
-import edu.kit.informatik.controller.commands.action.*;
+import edu.kit.informatik.controller.commands.action.CardRewardRequest;
+import edu.kit.informatik.controller.commands.action.DiceRollRequest;
+import edu.kit.informatik.controller.commands.action.HealRequest;
+import edu.kit.informatik.controller.commands.action.RewardReqeust;
+import edu.kit.informatik.controller.commands.action.SelectCardRequest;
+import edu.kit.informatik.controller.commands.action.ShuffleCardRequest;
+import edu.kit.informatik.controller.commands.action.TargetRequest;
 import edu.kit.informatik.controller.commands.levels.Level;
 import edu.kit.informatik.controller.commands.levels.Room;
 import edu.kit.informatik.controller.commands.requests.AnswerFlag;
-
 import edu.kit.informatik.controller.commands.requests.Reward;
 import edu.kit.informatik.controller.commands.resources.QuitException;
-import edu.kit.informatik.model.abilities.*;
+import edu.kit.informatik.model.abilities.Card;
+import edu.kit.informatik.model.abilities.CardClass;
+import edu.kit.informatik.model.abilities.CardType;
+import edu.kit.informatik.model.abilities.DefensiveCard;
+import edu.kit.informatik.model.abilities.Focus;
+import edu.kit.informatik.model.abilities.OffensiveCard;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Fire;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Ice;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Lightning;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Reflect;
 import edu.kit.informatik.model.abilities.player_abilities.magical.Water;
-import edu.kit.informatik.model.abilities.player_abilities.physical.*;
-import edu.kit.informatik.model.enteties.*;
-import edu.kit.informatik.model.enteties.monster.*;
+import edu.kit.informatik.model.abilities.player_abilities.physical.Parry;
+import edu.kit.informatik.model.abilities.player_abilities.physical.Pierce;
+import edu.kit.informatik.model.abilities.player_abilities.physical.Slash;
+import edu.kit.informatik.model.abilities.player_abilities.physical.Swing;
+import edu.kit.informatik.model.abilities.player_abilities.physical.Thrust;
+import edu.kit.informatik.model.enteties.CharacterClass;
+import edu.kit.informatik.model.enteties.Entity;
+import edu.kit.informatik.model.enteties.Monster;
+import edu.kit.informatik.model.enteties.MonsterType;
+import edu.kit.informatik.model.enteties.Player;
+import edu.kit.informatik.model.enteties.monster.Bear;
+import edu.kit.informatik.model.enteties.monster.DarkElf;
+import edu.kit.informatik.model.enteties.monster.Frog;
+import edu.kit.informatik.model.enteties.monster.Ghost;
+import edu.kit.informatik.model.enteties.monster.Goblin;
+import edu.kit.informatik.model.enteties.monster.Gorgon;
+import edu.kit.informatik.model.enteties.monster.Hornet;
+import edu.kit.informatik.model.enteties.monster.Mushroomlin;
+import edu.kit.informatik.model.enteties.monster.Mushroomlon;
+import edu.kit.informatik.model.enteties.monster.Rat;
+import edu.kit.informatik.model.enteties.monster.ShadowBlade;
+import edu.kit.informatik.model.enteties.monster.Skeleton;
+import edu.kit.informatik.model.enteties.monster.Snake;
+import edu.kit.informatik.model.enteties.monster.Spider;
+import edu.kit.informatik.model.enteties.monster.Tarantula;
+import edu.kit.informatik.model.enteties.monster.WildBoar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,31 +57,43 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+/**
+ * This class is handles the game logic.
+ * @author unyrg
+ * @version 1.0
+ */
 public class RunasStrive {
     private final Session session;
     private final Player player;
     private int level;
-    private int room;
+
     private List<Card> playerCards;
-    Queue<List<Monster>> monster;
+    private Queue<List<Monster>> monster;
     private Level currentLevel;
     private Room currentRoom;
-    private AnswerFlag status = AnswerFlag.VALID;
-    private List<Monster> deadMonsters = new ArrayList<>();
+    private final List<Monster> deadMonsters = new ArrayList<>();
 
+    /**
+     * Constructor for the RunasStrive class.
+     *
+     * @param session the session of the game
+     * @param player  the player of the game
+     */
     public RunasStrive(Session session, Player player) {
         this.session = session;
         this.player = player;
         this.level = 1;
-        this.room = 1;
         initMonster();
     }
 
-
+    /**
+     * Starts the game.
+     *
+     * @throws QuitException if the player quits the game
+     */
     public void start() throws QuitException {
-        for (int i = 0; i < 3 && status == AnswerFlag.VALID; i++) {
+        for (int i = 0; i < 3; i++) {
             loadLevel();
-            room = 1;
         }
     }
 
@@ -61,10 +106,10 @@ public class RunasStrive {
     }
 
     private void loadRoom() throws QuitException {
-        for (int i = 0; i < 4 && status == AnswerFlag.VALID; i++) {
+        for (int i = 0; i < 4; i++) {
             currentRoom = currentLevel.loadRoom();
             combat();
-            if (room != 4) {
+            if (currentRoom.getRoom() != 4) {
                 requestReward();
             } else {
                 if (level == 2) {
@@ -75,7 +120,6 @@ public class RunasStrive {
             }
             if (this.player.getCurrentHp() < this.player.getMaxHp() && this.player.getCards().size() > 1)
                 requestHealing();
-            room++;
         }
     }
 
@@ -90,11 +134,11 @@ public class RunasStrive {
 
 
     private void combat() throws QuitException {
-        this.session.printIntro(room, currentLevel);
-        while (currentRoom.monstersAlive() && this.player.getCurrentHp() > 0 && status == AnswerFlag.VALID) {
+        this.session.printIntro(currentRoom.getRoom(), currentLevel);
+        while (currentRoom.monstersAlive() && !this.player.isDead()) {
             this.session.printEncounter(currentRoom.getMonsters());
             requestCard();
-            evaluateCard(this.player, this.player.getCurrentCard());
+            evaluateCard(this.player);
             for (Monster monster : currentRoom.getMonsters()) {
                 if (monster.getCurrentHp() > 0) checkFocus(monster);
             }
@@ -104,7 +148,6 @@ public class RunasStrive {
                 checkCost(monster, monster.getCurrentCard());
                 evaluateCard(monster, monster.getCurrentCard());
             }
-            //todo: remove monster after loop
             for (Monster monster : deadMonsters) {
                 currentRoom.removeMonster(monster);
             }
@@ -113,18 +156,8 @@ public class RunasStrive {
         }
     }
 
-    private void checkCost(Monster monster, Card card) {
-        if (card.getCardType().equals(CardType.OFFENSIVE)) {
-            OffensiveCard attack = (OffensiveCard) card;
-            if (monster.getFocusPoints() < attack.getAbilityLevel() && attack.getCardClass() == CardClass.MAGICAL) {
-                monster.getCard();
-                checkCost(monster, monster.getCurrentCard());
-            }
-        }
-    }
-
-    //Todo: Die for Runa's death
-    private void evaluateCard(Entity entity, Card card) throws QuitException {
+    private void evaluateCard(Entity entity) throws QuitException {
+        Card card = entity.getCurrentCard();
         if (entity.getCurrentHp() > 0) {
             if (card.getCardType().equals(CardType.OFFENSIVE)) {
                 //check for target input
@@ -149,7 +182,13 @@ public class RunasStrive {
         }
     }
 
-
+    /**
+     * Evaluates an offensive card.
+     *
+     * @param attacker the attacker
+     * @param card     the card
+     * @throws QuitException if the player quits the game
+     */
     private void evaluateOffensive(Entity attacker, OffensiveCard card) throws QuitException {
         CardClass cardClass = card.getCardClass();
         Entity target = attacker.getCurrentTarget();
@@ -190,6 +229,7 @@ public class RunasStrive {
                 // attacker and target receive damage
                 attacker.dealDamage(Math.abs(calcDamageAfterDefense(attacker, 0)));
                 this.session.printDamage(target, damage, cardClass.getShortCut());
+                target.dealDamage(damage);
                 checkDeath(target);
                 this.session.printDamage(attacker, Math.abs(calcDamageAfterDefense(attacker, 0)), cardClass.getShortCut());
             } else {
@@ -198,13 +238,13 @@ public class RunasStrive {
                 this.session.printDamage(attacker, card.getDamage(0), cardClass.getShortCut());
             }
         }
-        target.dealDamage(damage);
-        //jetzt alles ausgeben
-        if (!reflect)
+
+        if (!reflect) {
+            target.dealDamage(damage);
             this.session.printDamage(target, damage, cardClass.getShortCut());
+        }
         checkDeath(target);
         checkDeath(attacker);
-
     }
 
     private void checkDeath(Entity target) throws QuitException {
@@ -223,7 +263,7 @@ public class RunasStrive {
     }
 
     private void requestReward() throws QuitException {
-        RewardReqeust rewardReqeust = new RewardReqeust(this.player);
+        RewardReqeust rewardReqeust = new RewardReqeust();
         if (this.player.getDice() < this.player.getMaxDice())
             this.session.requestInput(rewardReqeust);
         else
@@ -235,8 +275,6 @@ public class RunasStrive {
             } else {
                 requestCardReward();
             }
-        } else {
-            status = AnswerFlag.QUIT;
         }
     }
 
@@ -250,21 +288,18 @@ public class RunasStrive {
                 this.player.getCards().remove(heal.getValue().get(i) - i);
             }
             this.session.printHealing(this.player.heal(10 * heal.getValue().size()));
-        } else {
-            status = AnswerFlag.QUIT;
         }
     }
 
     private void requestCardReward() throws QuitException {
-        List<Card> options = this.playerCards.subList(0, room > 1 ? Math.min(4, this.playerCards.size()) : 2);
+        List<Card> options = this.playerCards.subList(
+                0, currentRoom.getRoom() > 1 ? Math.min(4, this.playerCards.size()) : 2);
         CardRewardRequest cardRewardRequest = new CardRewardRequest(options);
         this.session.requestInput(cardRewardRequest);
         if (!cardRewardRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) {
             this.player.addCards(cardRewardRequest.getValue());
             this.session.printCardReceptions(cardRewardRequest.getValue());
             this.playerCards.removeAll(options);
-        } else {
-            status = AnswerFlag.QUIT;
         }
     }
 
@@ -272,7 +307,7 @@ public class RunasStrive {
         DiceRollRequest rollRequest = new DiceRollRequest(this.player.getDice());
         this.session.requestInput(rollRequest);
         if (!rollRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) return rollRequest.getValue();
-        else status = AnswerFlag.QUIT;
+
 
         return 0;
     }
@@ -282,8 +317,7 @@ public class RunasStrive {
         this.session.requestInput(targetSelection);
         if (!targetSelection.getAnswerFlag().equals(AnswerFlag.QUIT))
             this.player.setCurrentTarget(targetSelection.getValue());
-        else
-            status = AnswerFlag.QUIT;
+
     }
 
     private void requestCard() throws QuitException {
@@ -291,8 +325,6 @@ public class RunasStrive {
         this.session.requestInput(cardSelection);
         if (!cardSelection.getAnswerFlag().equals(AnswerFlag.QUIT)) {
             this.player.setCurrentCard(cardSelection.getValue());
-        } else {
-            status = AnswerFlag.QUIT;
         }
     }
 
@@ -323,8 +355,6 @@ public class RunasStrive {
         this.session.requestInput(shuffle);
         if (!shuffle.getAnswerFlag().equals(AnswerFlag.QUIT)) {
             shuffle(shuffle.getValue().poll(), shuffle.getValue().poll());
-        } else {
-            status = AnswerFlag.QUIT;
         }
     }
 }

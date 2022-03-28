@@ -6,6 +6,12 @@ import edu.kit.informatik.controller.commands.requests.InputRequest;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * This class represents a request to shuffle the cards.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
 
     private static final String QUESTION = "To shuffle ability cards and monsters, enter two seeds\n";
@@ -19,8 +25,8 @@ public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
             setAnswerFlag(AnswerFlag.QUIT);
             return;
         }
-        if(input.endsWith(",")) {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+        if (input.endsWith(",")) {
+            setAnswerFlag(AnswerFlag.INVALID);
             return;
         }
         if (seeds.length == 2) {
@@ -30,11 +36,11 @@ public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
                     if (number > 0)
                         intSeeds.add(number);
                 } catch (NumberFormatException e) {
-                    setAnswerFlag(AnswerFlag.UNUSABLE);
+                    setAnswerFlag(AnswerFlag.INVALID);
                 }
             }
         } else {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+            setAnswerFlag(AnswerFlag.INVALID);
             return;
         }
         if (intSeeds.size() == 2) {

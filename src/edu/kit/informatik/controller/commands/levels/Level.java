@@ -1,6 +1,5 @@
 package edu.kit.informatik.controller.commands.levels;
 
-import edu.kit.informatik.controller.Session;
 import edu.kit.informatik.model.enteties.Monster;
 import edu.kit.informatik.model.enteties.Player;
 import edu.kit.informatik.model.enteties.monster.MegaSaurus;
@@ -11,13 +10,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a level.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Level {
     private final Player player;
     private final List<Monster> monster;
     Queue<Room> rooms;
     private final int level;
 
-
+    /**
+     * This constructor creates a new level.
+     *
+     * @param player  the player
+     * @param monster the monsters for the level
+     * @param level   the level-index
+     */
     public Level(Player player, List<Monster> monster, int level) {
         this.monster = monster;
         this.player = player;
@@ -33,19 +44,29 @@ public class Level {
                 roomMonster.add(this.monster.get(0));
                 this.monster.remove(0);
             }
-            rooms.add(new Room(this.player, roomMonster, this, (int) i));
+            rooms.add(new Room(roomMonster, (int) i));
         }
-        if(level == 1)
-            rooms.add(new Room(this.player, new ArrayList<>(List.of(new SpiderKing())), this, 4));
+        if (level == 1)
+            rooms.add(new Room(new ArrayList<>(List.of(new SpiderKing())), 4));
         else
-            rooms.add(new Room(this.player, new ArrayList<>(List.of(new MegaSaurus())), this, 4));
+            rooms.add(new Room(new ArrayList<>(List.of(new MegaSaurus())), 4));
         return rooms;
     }
 
+    /**
+     * This method returns the next room.
+     *
+     * @return the next room
+     */
     public Room loadRoom() {
         return this.rooms.poll();
     }
 
+    /**
+     * This method returns the level-index.
+     *
+     * @return the level-index
+     */
     public int getLevel() {
         return level;
     }

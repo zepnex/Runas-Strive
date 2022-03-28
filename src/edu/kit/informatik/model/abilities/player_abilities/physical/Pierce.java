@@ -6,14 +6,25 @@ import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.OffensiveCard;
 import edu.kit.informatik.model.enteties.MonsterType;
 
+/**
+ * This class represents a Pierce card.
+ *
+ * @author unryg
+ * @version 1.0
+ */
 public class Pierce extends OffensiveCard {
     private static final String CARD_NAME = "Pierce";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
     private static final int COST = 0;
 
+    /**
+     * The constructor of the Pierce class.
+     *
+     * @param n the ability level of the card
+     */
     public Pierce(int n) {
         super(n);
-        setCost(COST);
+
     }
 
     @Override

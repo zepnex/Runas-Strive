@@ -8,7 +8,10 @@ public class DiceRollRequest extends InputRequest<Integer> {
     private static final String REGEX = "[1-%d]";
     int dice;
 
-
+    /**
+     * Sets the dice to roll.
+     * @param dice current dice
+     */
     public DiceRollRequest(int dice) {
         this.dice = dice;
     }
@@ -23,10 +26,15 @@ public class DiceRollRequest extends InputRequest<Integer> {
             setAnswerFlag(AnswerFlag.VALID);
             setValue(Integer.parseInt(input));
         } else {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+            setAnswerFlag(AnswerFlag.INVALID);
         }
     }
 
+    /**
+     * Checks if the input is a valid dice roll.
+     * @param input the input to check
+     * @return true if the input is a valid dice roll, false otherwise
+     */
     private boolean validInput(String input) {
         try {
             int number = Integer.parseInt(input);

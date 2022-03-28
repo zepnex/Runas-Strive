@@ -5,8 +5,17 @@ import edu.kit.informatik.controller.commands.requests.InputRequest;
 import edu.kit.informatik.model.abilities.Card;
 import edu.kit.informatik.model.enteties.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+/**
+ * This class represents a heal request.
+ * @author unyrg
+ * @version 1.0
+ */
 public class HealRequest extends InputRequest<List<Integer>> {
     private static final String QUESTION = "Runa (%d/%d HP) can discard ability cards for healing (or none)\n";
     private static final String ANSWER_SINGLE = "Enter number [1--2]:";
@@ -15,6 +24,11 @@ public class HealRequest extends InputRequest<List<Integer>> {
     private final List<Card> playerCards;
     private final Player player;
 
+    /**
+     * Creates a new HealRequest.
+     * @param player the player to heal
+     * @param playerCards the cards of the player
+     */
     public HealRequest(Player player, List<Card> playerCards) {
         this.playerCards = playerCards;
         this.player = player;
@@ -38,13 +52,13 @@ public class HealRequest extends InputRequest<List<Integer>> {
                 multipleAnswer(input);
             }
         } else {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+            setAnswerFlag(AnswerFlag.INVALID);
         }
     }
 
     private void singleAnswer(String input) {
-        if (!validInput(input) || !(input.split(",").length >= 1)) {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+        if (validInput(input) || !(input.split(",").length >= 1)) {
+            setAnswerFlag(AnswerFlag.INVALID);
             return;
         }
         setAnswerFlag(AnswerFlag.VALID);
@@ -58,20 +72,20 @@ public class HealRequest extends InputRequest<List<Integer>> {
             for (String s : input.split(",")) {
                 int number = Integer.parseInt(s);
                 if (!(number > 0 && number <= playerCards.size()) || set.contains(number)) {
-                    return false;
+                    return true;
                 }
                 set.add(number);
             }
-            return true;
-        } catch (NumberFormatException e) {
             return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 
     private void multipleAnswer(String input) {
         String[] split = input.split(",");
-        if (!validInput(input) || (split.length == playerCards.size())) {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+        if (validInput(input) || (split.length == playerCards.size())) {
+            setAnswerFlag(AnswerFlag.INVALID);
             return;
         }
         setAnswerFlag(AnswerFlag.VALID);

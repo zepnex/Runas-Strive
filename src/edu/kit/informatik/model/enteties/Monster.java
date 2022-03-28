@@ -16,6 +16,7 @@ public abstract class Monster extends Entity {
     public abstract Queue<Card> getAbilities();
 
     public Card getCard() {
+
         Card card = getAbilities().poll();
         setCurrentCard(card);
         getAbilities().add(card);

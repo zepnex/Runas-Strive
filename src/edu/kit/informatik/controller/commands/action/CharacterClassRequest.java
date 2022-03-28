@@ -21,9 +21,9 @@ public class CharacterClassRequest extends InputRequest<CharacterClass> {
                     return;
                 }
             } catch (NumberFormatException e) {
-                setAnswerFlag(AnswerFlag.UNUSABLE);
+                setAnswerFlag(AnswerFlag.INVALID);
             }
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+            setAnswerFlag(AnswerFlag.INVALID);
 
         }
     }

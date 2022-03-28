@@ -32,7 +32,6 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
     @Override
     public void process(String input) {
         List<Card> chosenCards = new ArrayList<>();
-
         if (input.equals("quit")) {
             setAnswerFlag(AnswerFlag.QUIT);
             return;
@@ -47,21 +46,26 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
                 setAnswerFlag(AnswerFlag.VALID);
                 setValue(chosenCards);
             } else {
-                setAnswerFlag(AnswerFlag.UNUSABLE);
+                setAnswerFlag(AnswerFlag.INVALID);
             }
         } else {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+            setAnswerFlag(AnswerFlag.INVALID);
         }
     }
 
+    /**
+     * validate Input
+     * @param input input of the user
+     * @return true if the input is valid
+     */
     private boolean validInput(String[] input) {
-        //check for same number of input
         try {
+            //set to check for duplicates
             Set<Integer> set = new HashSet<>();
             for (String s : input) {
                 int number = Integer.parseInt(s);
+                // check if the number is in the range
                 if (!(number > 0 && number <= choices.size()) || set.contains(number)) {
-
                     return false;
                 }
                 set.add(number);
@@ -78,7 +82,6 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
         for (int i = 0; i < choices.size(); i++) {
             builder.append(String.format("%d) %s\n", i + 1, choices.get(i).toString()));
         }
-
         return builder.toString();
     }
 

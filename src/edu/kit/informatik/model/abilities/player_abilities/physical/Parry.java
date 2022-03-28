@@ -2,16 +2,23 @@ package edu.kit.informatik.model.abilities.player_abilities.physical;
 
 
 import edu.kit.informatik.model.abilities.CardClass;
-import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.DefensiveCard;
 
 /**
- * Reduces the physically damage of a monster in the next round
+ * This class represents a Parry card.
+ *
+ * @author unryg
+ * @version 1.0
  */
 public class Parry extends DefensiveCard {
     private static final String CARD_NAME = "Parry";
     private static final CardClass CARD_CLASS = CardClass.PHYSICAL;
 
+    /**
+     * The constructor of the Parry class.
+     *
+     * @param n the ability level of the Parry card
+     */
     public Parry(int n) {
         super(n);
     }

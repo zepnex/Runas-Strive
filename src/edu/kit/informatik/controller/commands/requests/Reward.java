@@ -1,7 +1,13 @@
 package edu.kit.informatik.controller.commands.requests;
 
 public enum Reward {
+    /**
+     * The Reward to get new Cards
+     */
     ABILITY("new ability cards"),
+    /**
+     * The Reward to update dice
+     */
     DICE("next player dice");
 
 
@@ -11,6 +17,11 @@ public enum Reward {
         this.reward = reward;
     }
 
+    /**
+     *  Returns the string representation of the enum.
+     *
+     * @return the string representation of the enum
+     */
     public String getReward() {
         return reward;
     }

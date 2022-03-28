@@ -6,6 +6,11 @@ import edu.kit.informatik.model.enteties.Monster;
 
 import java.util.List;
 
+/**
+ * This class represents a request to the user to select a target.
+ * @author unyrg
+ * @version 1.0
+ */
 public class TargetRequest extends InputRequest<Monster> {
     private static final String QUESTION = "Select Runa's target.\n";
     private static final String ANSWER = "Enter number [1--%d]:";
@@ -23,7 +28,7 @@ public class TargetRequest extends InputRequest<Monster> {
             setAnswerFlag(AnswerFlag.VALID);
             setValue(this.monsters.get(Integer.parseInt(input) - 1));
         } else {
-            setAnswerFlag(AnswerFlag.UNUSABLE);
+            setAnswerFlag(AnswerFlag.INVALID);
         }
     }
 

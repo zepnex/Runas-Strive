@@ -1,34 +1,56 @@
 package edu.kit.informatik.model.abilities;
 
-
+/**
+ * This class represents a card.
+ */
 public abstract class Card {
     private int abilityLevel;
     private boolean isStarterCard;
 
+    /**
+     * This class represents a card.
+     *
+     * @param n the ability level of the card
+     */
     public Card(int n) {
         this.abilityLevel = n;
     }
 
+    /**
+     * This method returns the name of the card.
+     *
+     * @return the name of the card
+     */
     public abstract String getName();
 
+    /**
+     * This method returns the ability level of the card.
+     *
+     * @return the ability level of the card
+     */
     public int getAbilityLevel() {
         return abilityLevel;
     }
 
+    /**
+     * This method returns the card-type of the card.
+     *
+     * @return the card-type of the card
+     */
     public abstract CardType getCardType();
 
+    /**
+     * This method returns the card-class of the card.
+     *
+     * @return the card-class of the card
+     */
     public abstract CardClass getCardClass();
 
+    /**
+     * This methode upgrades the card.
+     */
     public void upgradeCard() {
         this.abilityLevel++;
-    }
-
-    public void setStarterCard() {
-        isStarterCard = true;
-    }
-
-    public boolean isStarterCard() {
-        return isStarterCard;
     }
 
     @Override
