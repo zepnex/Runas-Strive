@@ -140,13 +140,13 @@ public class RunasStrive {
             requestCard();
             evaluateCard(this.player);
             for (Monster monster : currentRoom.getMonsters()) {
-                if (monster.getCurrentHp() > 0) checkFocus(monster);
+                if (!monster.isDead()) checkFocus(monster);
             }
             for (Monster monster : currentRoom.getMonsters()) {
                 monster.setCurrentTarget(this.player);
                 monster.getCard();
-                checkCost(monster, monster.getCurrentCard());
-                evaluateCard(monster, monster.getCurrentCard());
+                monster.nextPossibleCard();
+                evaluateCard(monster);
             }
             for (Monster monster : deadMonsters) {
                 currentRoom.removeMonster(monster);
@@ -248,7 +248,7 @@ public class RunasStrive {
     }
 
     private void checkDeath(Entity target) throws QuitException {
-        if (target.getCurrentHp() <= 0) {
+        if (target.isDead()) {
             session.printDeath(target);
             if (target.isPlayer())
                 throw new QuitException();

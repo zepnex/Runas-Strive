@@ -17,9 +17,14 @@ public abstract class Entity {
         isFocused = false;
     }
 
+
+    public boolean isDead() {
+        return hp <= 0;
+    }
+
     public void dealDamage(int amount) {
 
-        hp -= Math.min(0,amount);
+        hp -= Math.max(0,amount);
     }
 
     public int heal(int amount) {
