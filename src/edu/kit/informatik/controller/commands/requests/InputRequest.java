@@ -3,6 +3,7 @@ package edu.kit.informatik.controller.commands.requests;
 /**
  * This class represents a request to get input from the user.
  *
+ * @param <T> the type of the returned value
  * @author unyrg
  * @version 1.0
  */

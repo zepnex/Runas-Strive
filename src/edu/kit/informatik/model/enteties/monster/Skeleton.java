@@ -11,12 +11,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Skeleton monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Skeleton extends Monster {
     private static final int MAX_HP = 14;
     private static final String NAME = "Skeleton";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.LIGHTNING;
-    private final static Queue<Card> ABILITIES = new LinkedList<>(List.of(new Focus(1), new Lightning(1)));
+    private static final Queue<Card> ABILITIES = new LinkedList<>(List.of(new Focus(1), new Lightning(1)));
 
 
     @Override

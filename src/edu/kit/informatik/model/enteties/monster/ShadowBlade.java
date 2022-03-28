@@ -12,13 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a ShadowBlade monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class ShadowBlade extends Monster {
     private static final int MAX_HP = 27;
     private static final String NAME = "Shadow Blade";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.LIGHTNING;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Scratch(2), new Focus(2), new Lightning(2)));
+    private static final Queue<Card> ABILITIES
+            = new LinkedList<>(List.of(new Scratch(2), new Focus(2), new Lightning(2)));
 
 
     @Override

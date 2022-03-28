@@ -12,12 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Bear monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Bear extends Monster {
     private static final int MAX_HP = 40;
     private static final String NAME = "Bear";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
-    private static final int ABILITY_LEVEL = 2;
     private static final Queue<Card> ABILITIES
             = new LinkedList<>(List.of(new Claw(2), new Deflect(2), new Block(2)));
 

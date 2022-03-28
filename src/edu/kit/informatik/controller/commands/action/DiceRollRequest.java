@@ -3,13 +3,19 @@ package edu.kit.informatik.controller.commands.action;
 import edu.kit.informatik.controller.commands.requests.AnswerFlag;
 import edu.kit.informatik.controller.commands.requests.InputRequest;
 
+/**
+ * This class represents a request to roll the dice.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class DiceRollRequest extends InputRequest<Integer> {
     private static final String ANSWER = "Enter dice roll [1--%d]:";
-    private static final String REGEX = "[1-%d]";
-    int dice;
+    private final int dice;
 
     /**
-     * Sets the dice to roll.
+     * The constructor for the DiceRollRequest.
+     *
      * @param dice current dice
      */
     public DiceRollRequest(int dice) {
@@ -32,6 +38,7 @@ public class DiceRollRequest extends InputRequest<Integer> {
 
     /**
      * Checks if the input is a valid dice roll.
+     *
      * @param input the input to check
      * @return true if the input is a valid dice roll, false otherwise
      */

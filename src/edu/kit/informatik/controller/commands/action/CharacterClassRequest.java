@@ -4,6 +4,12 @@ import edu.kit.informatik.controller.commands.requests.AnswerFlag;
 import edu.kit.informatik.controller.commands.requests.InputRequest;
 import edu.kit.informatik.model.enteties.CharacterClass;
 
+/**
+ * This class represents a request for a character class.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class CharacterClassRequest extends InputRequest<CharacterClass> {
     private static final String QUESTION = "Select Runa's character class\n";
     private static final String ANSWER = String.format("Enter number [1--%s]:", CharacterClass.values().length);

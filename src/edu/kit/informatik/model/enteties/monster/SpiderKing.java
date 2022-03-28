@@ -13,13 +13,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Spider King monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class SpiderKing extends Monster {
     private static final int MAX_HP = 50;
     private static final String NAME = "Spider King";
-    private static final boolean BOSS = true;
     private static final MonsterType TYPE = MonsterType.LIGHTNING;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList(List.of(new Bite(1), new Block(1), new Focus(1), new Lightning(1)));
+    private static final Queue<Card> ABILITIES
+            = new LinkedList<>(List.of(new Bite(1), new Block(1), new Focus(1), new Lightning(1)));
 
 
     @Override

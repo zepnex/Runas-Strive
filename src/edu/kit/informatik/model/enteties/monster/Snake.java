@@ -12,13 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Snake monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Snake extends Monster {
     private static final int MAX_HP = 31;
     private static final String NAME = "Snake";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.ICE;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Bite(2), new Focus(2), new Ice(2)));
+    private static final Queue<Card> ABILITIES
+            = new LinkedList<>(List.of(new Bite(2), new Focus(2), new Ice(2)));
 
 
     @Override

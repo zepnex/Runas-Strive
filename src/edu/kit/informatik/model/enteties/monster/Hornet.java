@@ -12,13 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Hornet monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Hornet extends Monster {
     private static final int MAX_HP = 32;
     private static final String NAME = "Hornet";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.FIRE;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Scratch(2), new Focus(2), new Fire(1), new Fire(2)));
+    private static final Queue<Card> ABILITIES
+            = new LinkedList<>(List.of(new Scratch(2), new Focus(2), new Fire(1), new Fire(2)));
 
 
     @Override

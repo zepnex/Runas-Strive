@@ -7,7 +7,10 @@ package edu.kit.informatik.model.abilities;
  * @version 1.0
  */
 public abstract class DefensiveCard extends Card {
-    public static CardType CARD_TYPE = CardType.DEFENSIVE;
+    /**
+     *
+     */
+    public static final CardType CARD_TYPE = CardType.DEFENSIVE;
 
     /**
      * The constructor of the DefensiveCard.

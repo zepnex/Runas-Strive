@@ -10,13 +10,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Ghost monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Ghost extends Monster {
     private static final int MAX_HP = 15;
     private static final String NAME = "Ghost";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.ICE;
     private static final Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Focus(1), new Ice(1)));
+            = new LinkedList<>(List.of(new Focus(1), new Ice(1)));
 
 
     @Override

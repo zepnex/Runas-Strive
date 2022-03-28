@@ -12,13 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Tarantula monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Tarantula extends Monster {
     private static final int MAX_HP = 33;
     private static final String NAME = "Tarantula";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Bite(2), new Block(2), new Scratch(2)));
+    private static final Queue<Card> ABILITIES
+            = new LinkedList<>(List.of(new Bite(2), new Block(2), new Scratch(2)));
 
 
     @Override

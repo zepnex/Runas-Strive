@@ -12,13 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Mushroomlon monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class Mushroomlon extends Monster {
     private static final int MAX_HP = 50;
     private static final String NAME = "Mushroomlon";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Deflect(2), new Scratch(2), new Block(2)));
+    private static final Queue<Card> ABILITIES
+            = new LinkedList<>(List.of(new Deflect(2), new Scratch(2), new Block(2)));
 
 
     @Override

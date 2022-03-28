@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * This class represents a request to the user to select a target.
+ *
  * @author unyrg
  * @version 1.0
  */
@@ -17,6 +18,11 @@ public class TargetRequest extends InputRequest<Monster> {
     private static final String REGEX = "[1-%d]";
     private final List<Monster> monsters;
 
+    /**
+     * The constructor for a target request.
+     *
+     * @param monsters the list of monsters that can be selected as target
+     */
     public TargetRequest(List<Monster> monsters) {
         this.monsters = monsters;
     }

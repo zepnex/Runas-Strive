@@ -14,13 +14,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Mega Saurus monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class MegaSaurus extends Monster {
     private static final int MAX_HP = 100;
     private static final String NAME = "Mega Saurus";
-    private static final boolean BOSS = true;
     private static final MonsterType TYPE = MonsterType.NORMAL;
-    private final static Queue<Card> ABILITIES
-        = new LinkedList<>(List.of(new Bite(2), new Block(2), new Focus(2), new Fire(1), new Lightning(1)));
+    private static final Queue<Card> ABILITIES = new LinkedList<>(
+            List.of(new Bite(2), new Block(2), new Focus(2), new Fire(1), new Lightning(1)));
 
 
     @Override
@@ -37,6 +42,7 @@ public class MegaSaurus extends Monster {
     public Queue<Card> getAbilities() {
         return ABILITIES;
     }
+
     @Override
     public MonsterType getMonsterType() {
         return TYPE;

@@ -1,7 +1,6 @@
 package edu.kit.informatik.controller.commands.levels;
 
 import edu.kit.informatik.model.enteties.Monster;
-import edu.kit.informatik.model.enteties.Player;
 import edu.kit.informatik.model.enteties.monster.MegaSaurus;
 import edu.kit.informatik.model.enteties.monster.SpiderKing;
 
@@ -17,21 +16,18 @@ import java.util.Queue;
  * @version 1.0
  */
 public class Level {
-    private final Player player;
     private final List<Monster> monster;
-    Queue<Room> rooms;
+    private final Queue<Room> rooms;
     private final int level;
 
     /**
      * This constructor creates a new level.
      *
-     * @param player  the player
      * @param monster the monsters for the level
      * @param level   the level-index
      */
-    public Level(Player player, List<Monster> monster, int level) {
+    public Level(List<Monster> monster, int level) {
         this.monster = monster;
-        this.player = player;
         this.level = level;
         this.rooms = initRooms();
     }

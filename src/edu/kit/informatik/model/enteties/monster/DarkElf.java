@@ -11,12 +11,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * This class represents a Dark Elf monster.
+ *
+ * @author unyrg
+ * @version 1.0
+ */
 public class DarkElf extends Monster {
     private static final int MAX_HP = 34;
     private static final String NAME = "Dark Elf";
-    private static final boolean BOSS = false;
     private static final MonsterType TYPE = MonsterType.NORMAL;
-    private final static Queue<Card> ABILITIES
+    private static final Queue<Card> ABILITIES
             = new LinkedList<>(List.of(new Focus(2), new Water(1), new Lightning(1)));
 
 

@@ -2,7 +2,6 @@ package edu.kit.informatik.model.abilities.monster_abilities.magical;
 
 
 import edu.kit.informatik.model.abilities.CardClass;
-import edu.kit.informatik.model.abilities.CardType;
 import edu.kit.informatik.model.abilities.DefensiveCard;
 
 /**

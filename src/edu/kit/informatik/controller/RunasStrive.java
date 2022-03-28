@@ -59,6 +59,7 @@ import java.util.Random;
 
 /**
  * This class is handles the game logic.
+ *
  * @author unyrg
  * @version 1.0
  */
@@ -100,7 +101,7 @@ public class RunasStrive {
     private void loadLevel() throws QuitException {
         initPlayerCards();
         shuffleCards();
-        currentLevel = new Level(this.player, this.monster.poll(), level);
+        currentLevel = new Level(this.monster.poll(), level);
         loadRoom();
         this.level++;
     }
@@ -219,8 +220,8 @@ public class RunasStrive {
             // Physical card
         }
         // calculate defense
-        if (target.getCurrentCard() != null && target.getCurrentCard().getCardType() == CardType.DEFENSIVE &&
-                attacker.getCurrentCard().getCardClass() == target.getCurrentCard().getCardClass()) {
+        if (target.getCurrentCard() != null && target.getCurrentCard().getCardType() == CardType.DEFENSIVE
+                && attacker.getCurrentCard().getCardClass() == target.getCurrentCard().getCardClass()) {
             damage = calcDamageAfterDefense(attacker, damage);
             reflect = target.getCurrentCard().getName().equals("Reflect");
         }
@@ -231,7 +232,8 @@ public class RunasStrive {
                 this.session.printDamage(target, damage, cardClass.getShortCut());
                 target.dealDamage(damage);
                 checkDeath(target);
-                this.session.printDamage(attacker, Math.abs(calcDamageAfterDefense(attacker, 0)), cardClass.getShortCut());
+                this.session.printDamage(
+                        attacker, Math.abs(calcDamageAfterDefense(attacker, 0)), cardClass.getShortCut());
             } else {
                 // only attacker receives damage
                 attacker.dealDamage(card.getDamage(0));
@@ -334,11 +336,15 @@ public class RunasStrive {
     }
 
     private void initMonster() {
-        this.monster = new LinkedList<>() {{
-            add(new ArrayList<>(List.of(new Frog(), new Ghost(), new Gorgon(), new Skeleton(), new Spider(), new Goblin(), new Rat(), new Mushroomlin())) {
-            });
-            add(new ArrayList<>(List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(), new Tarantula(), new Bear(), new Mushroomlon(), new WildBoar())));
-        }};
+        this.monster = new LinkedList<>() {
+            {
+                add(new ArrayList<>(List.of(new Frog(), new Ghost(), new Gorgon(), new Skeleton(), new Spider(),
+                        new Goblin(), new Rat(), new Mushroomlin())) {
+                });
+                add(new ArrayList<>(List.of(new Snake(), new DarkElf(), new ShadowBlade(), new Hornet(),
+                        new Tarantula(), new Bear(), new Mushroomlon(), new WildBoar())));
+            }
+        };
     }
 
     private void initPlayerCards() {

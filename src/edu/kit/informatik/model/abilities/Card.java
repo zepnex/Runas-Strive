@@ -2,10 +2,12 @@ package edu.kit.informatik.model.abilities;
 
 /**
  * This class represents a card.
+ *
+ * @author unyrg
+ * @version 1.0
  */
 public abstract class Card {
     private int abilityLevel;
-    private boolean isStarterCard;
 
     /**
      * This class represents a card.
