@@ -4,6 +4,7 @@ import edu.kit.informatik.controller.commands.action.CharacterClassRequest;
 import edu.kit.informatik.controller.commands.levels.Level;
 import edu.kit.informatik.controller.commands.requests.AnswerFlag;
 import edu.kit.informatik.controller.commands.requests.InputRequest;
+import edu.kit.informatik.controller.commands.resources.Messages;
 import edu.kit.informatik.controller.commands.resources.QuitException;
 import edu.kit.informatik.model.abilities.Card;
 import edu.kit.informatik.model.enteties.Entity;
@@ -74,7 +75,7 @@ public class Session {
      */
     public void printDamage(Entity entity, int damage, String type) {
         if (damage > 0)
-            System.out.printf("%s takes %d %s damage\n", entity.getName(), damage, type);
+            System.out.printf(Messages.DAMAGE_TEMPLATE.toString(), entity.getName(), damage, type);
     }
 
     /**
@@ -84,7 +85,7 @@ public class Session {
      * @param card   the card that was used
      */
     public void printTurn(Entity entity, Card card) {
-        System.out.printf("%s uses %s\n", entity.getName(), card.toString());
+        System.out.printf(Messages.TURN_TEMPLATE.toString(), entity.getName(), card.toString());
     }
 
     /**
@@ -95,7 +96,7 @@ public class Session {
      */
     public void printFocus(Entity entity, int focusPoints) {
         if (focusPoints > 0)
-            System.out.printf("%s gains %d focus\n", entity.getName(), focusPoints);
+            System.out.printf(Messages.FOCUS_TEMPLATE.toString(), entity.getName(), focusPoints);
     }
 
     /**
@@ -104,7 +105,7 @@ public class Session {
      * @param player the player that received the upgrade
      */
     public void printUpgradeDice(Player player) {
-        System.out.printf("Runa upgrades her die to a d%d\n", player.getDice());
+        System.out.printf(Messages.UPGRADE_DICE_TEMPLATE.toString(), player.getDice());
     }
 
     /**
@@ -114,7 +115,7 @@ public class Session {
      */
     public void printCardReceptions(List<Card> cards) {
         for (Card card : cards) {
-            System.out.printf("Runa gets %s\n", card.toString());
+            System.out.printf(Messages.CARD_RECEPTION_TEMPLATE.toString(), card.toString());
         }
     }
 
@@ -124,7 +125,7 @@ public class Session {
      * @param healing the amount of healing
      */
     public void printHealing(int healing) {
-        System.out.printf("Runa gains %d health\n", healing);
+        System.out.printf(Messages.HEALING_TEMPLATE.toString(), healing);
     }
 
     /**
@@ -133,14 +134,14 @@ public class Session {
      * @param entity the entity that died
      */
     public void printDeath(Entity entity) {
-        System.out.printf("%s dies\n", entity.getName());
+        System.out.printf(Messages.DEATH_TEMPLATE.toString(), entity.getName());
     }
 
     /**
      * This method prints the victory of the player.
      */
     public void printRunaWon() {
-        System.out.println("Runa won!");
+        System.out.println(Messages.WON_TEMPLATE);
     }
 
     /**
@@ -150,7 +151,7 @@ public class Session {
      * @param level the current level
      */
     public void printIntro(int stage, Level level) {
-        System.out.printf("Runa enters Stage %d of Level %d\n", stage, level.getLevel());
+        System.out.printf(Messages.INTRO_TEMPLATE.toString(), stage, level.getLevel());
     }
 
     /**
@@ -159,16 +160,17 @@ public class Session {
      * @param monsters the monsters in the fight
      */
     public void printEncounter(List<Monster> monsters) {
-        System.out.println("----------------------------------------");
-        System.out.printf("Runa (%d/%d HP, %d/%d FP)\n", this.player.getCurrentHp(), this.player.getMaxHp(),
+        System.out.println(Messages.DIVIDER);
+        System.out.printf(Messages.RUNA_STATUS_TEMPLATE.toString(), this.player.getCurrentHp(), this.player.getMaxHp(),
                 this.player.getFocusPoints(), this.player.getDice());
-        System.out.println("vs.");
+        System.out.println(Messages.VS_TEMPLATE);
         for (Monster monster : monsters) {
             if (monster.getCurrentHp() > 0) {
-                System.out.printf("%s (%d HP, %d FP): attempts %s next\n", monster.getName(), monster.getCurrentHp(),
+                System.out.printf(
+                        Messages.MONSTER_STATUS_TEMPLATE.toString(), monster.getName(), monster.getCurrentHp(),
                         monster.getFocusPoints(), monster.getAbilities().element().toString());
             }
         }
-        System.out.println("----------------------------------------");
+        System.out.println(Messages.DIVIDER);
     }
 }

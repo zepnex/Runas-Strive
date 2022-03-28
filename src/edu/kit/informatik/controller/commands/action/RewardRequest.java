@@ -10,7 +10,7 @@ import edu.kit.informatik.controller.commands.requests.Reward;
  * @author unyrg
  * @version 1.0
  */
-public class RewardReqeust extends InputRequest<Reward> {
+public class RewardRequest extends InputRequest<Reward> {
     private static final String QUESTION = "Choose Runa's reward\n";
     private static final String ANSWER = "Enter number [1--2]:";
     private static final String REGEX = "[1-2]";

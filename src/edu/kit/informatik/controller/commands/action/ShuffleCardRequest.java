@@ -16,6 +16,7 @@ public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
 
     private static final String QUESTION = "To shuffle ability cards and monsters, enter two seeds\n";
     private static final String ANSWER = String.format("Enter seeds [1--%d] separated by comma:", Integer.MAX_VALUE);
+    private static final int SEED_COUNT = 2;
 
     @Override
     public void process(String input) {
@@ -43,7 +44,7 @@ public class ShuffleCardRequest extends InputRequest<Queue<Integer>> {
             setAnswerFlag(AnswerFlag.INVALID);
             return;
         }
-        if (intSeeds.size() == 2) {
+        if (intSeeds.size() == SEED_COUNT) {
             setAnswerFlag(AnswerFlag.VALID);
             setValue(intSeeds);
         }

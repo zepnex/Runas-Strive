@@ -13,6 +13,7 @@ import java.util.Set;
 
 /**
  * This class represents a heal request.
+ *
  * @author unyrg
  * @version 1.0
  */
@@ -20,13 +21,15 @@ public class HealRequest extends InputRequest<List<Integer>> {
     private static final String QUESTION = "Runa (%d/%d HP) can discard ability cards for healing (or none)\n";
     private static final String ANSWER_SINGLE = "Enter number [1--2]:";
     private static final String ANSWER_MULTIPLE = "Enter numbers [1--%d] separated by comma:";
+    private static final int MINIMUM_CARDS = 2;
 
     private final List<Card> playerCards;
     private final Player player;
 
     /**
      * Creates a new HealRequest.
-     * @param player the player to heal
+     *
+     * @param player      the player to heal
      * @param playerCards the cards of the player
      */
     public HealRequest(Player player, List<Card> playerCards) {
@@ -46,7 +49,7 @@ public class HealRequest extends InputRequest<List<Integer>> {
             return;
         }
         if (!input.endsWith(",")) {
-            if (playerCards.size() == 2) {
+            if (playerCards.size() == MINIMUM_CARDS) {
                 singleAnswer(input);
             } else {
                 multipleAnswer(input);

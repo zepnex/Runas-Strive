@@ -3,7 +3,7 @@ package edu.kit.informatik.controller;
 import edu.kit.informatik.controller.commands.action.CardRewardRequest;
 import edu.kit.informatik.controller.commands.action.DiceRollRequest;
 import edu.kit.informatik.controller.commands.action.HealRequest;
-import edu.kit.informatik.controller.commands.action.RewardReqeust;
+import edu.kit.informatik.controller.commands.action.RewardRequest;
 import edu.kit.informatik.controller.commands.action.SelectCardRequest;
 import edu.kit.informatik.controller.commands.action.ShuffleCardRequest;
 import edu.kit.informatik.controller.commands.action.TargetRequest;
@@ -64,6 +64,9 @@ import java.util.Random;
  * @version 1.0
  */
 public class RunasStrive {
+    private static final int MAX_LEVEL = 2;
+    private static final int EFFECTIVE_FACTOR = 2;
+    private static final int HEAL_AMOUNT = 10;
     private final Session session;
     private final Player player;
     private int level;
@@ -93,7 +96,7 @@ public class RunasStrive {
      * @throws QuitException if the player quits the game
      */
     public void start() throws QuitException {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i <= MAX_LEVEL; i++) {
             loadLevel();
         }
     }
@@ -107,10 +110,10 @@ public class RunasStrive {
     }
 
     private void loadRoom() throws QuitException {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < currentLevel.getRoomCount(); i++) {
             currentRoom = currentLevel.loadRoom();
             combat();
-            if (currentRoom.getRoom() != 4) {
+            if (currentRoom.getRoom() != currentLevel.getRoomCount()) {
                 requestReward();
             } else {
                 if (level == 2) {
@@ -205,7 +208,7 @@ public class RunasStrive {
                 damage = card.getDamage(attacker.getFocusPoints());
                 MonsterType enemy = ((Monster) target).getMonsterType();
                 //calculate damage
-                damage += (card.isEffectiveOn(enemy) ? 2 * card.getAbilityLevel() : 0);
+                damage += (card.isEffectiveOn(enemy) ? EFFECTIVE_FACTOR * card.getAbilityLevel() : 0);
             } else {
                 damage = card.getDamage(0);
             }
@@ -265,14 +268,14 @@ public class RunasStrive {
     }
 
     private void requestReward() throws QuitException {
-        RewardReqeust rewardReqeust = new RewardReqeust();
+        RewardRequest rewardRequest = new RewardRequest();
         if (this.player.getDice() < this.player.getMaxDice())
-            this.session.requestInput(rewardReqeust);
+            this.session.requestInput(rewardRequest);
         else
-            rewardReqeust.setValue(Reward.ABILITY);
-        if (!rewardReqeust.getAnswerFlag().equals(AnswerFlag.QUIT)) {
-            if (rewardReqeust.getValue().equals(Reward.DICE)) {
-                this.player.increaseDice(this.player.getDice() + 2);
+            rewardRequest.setValue(Reward.ABILITY);
+        if (!rewardRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) {
+            if (rewardRequest.getValue().equals(Reward.DICE)) {
+                this.player.increaseDice(this.player.getDice() + EFFECTIVE_FACTOR);
                 this.session.printUpgradeDice(this.player);
             } else {
                 requestCardReward();
@@ -289,13 +292,14 @@ public class RunasStrive {
             for (int i = 0; i < heal.getValue().size(); i++) {
                 this.player.getCards().remove(heal.getValue().get(i) - i);
             }
-            this.session.printHealing(this.player.heal(10 * heal.getValue().size()));
+            this.session.printHealing(this.player.heal(HEAL_AMOUNT * heal.getValue().size()));
         }
     }
 
     private void requestCardReward() throws QuitException {
         List<Card> options = this.playerCards.subList(
-                0, currentRoom.getRoom() > 1 ? Math.min(4, this.playerCards.size()) : 2);
+                0, currentRoom.getRoom() > 1 ? Math.min(currentLevel.getRoomCount(),
+                        this.playerCards.size()) : EFFECTIVE_FACTOR);
         CardRewardRequest cardRewardRequest = new CardRewardRequest(options);
         this.session.requestInput(cardRewardRequest);
         if (!cardRewardRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) {
@@ -309,8 +313,6 @@ public class RunasStrive {
         DiceRollRequest rollRequest = new DiceRollRequest(this.player.getDice());
         this.session.requestInput(rollRequest);
         if (!rollRequest.getAnswerFlag().equals(AnswerFlag.QUIT)) return rollRequest.getValue();
-
-
         return 0;
     }
 

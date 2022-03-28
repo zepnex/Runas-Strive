@@ -16,6 +16,7 @@ import java.util.Queue;
  * @version 1.0
  */
 public class Level {
+    private static final int BOSS_ROOM = 4;
     private final List<Monster> monster;
     private final Queue<Room> rooms;
     private final int level;
@@ -43,9 +44,9 @@ public class Level {
             rooms.add(new Room(roomMonster, (int) i));
         }
         if (level == 1)
-            rooms.add(new Room(new ArrayList<>(List.of(new SpiderKing())), 4));
+            rooms.add(new Room(new ArrayList<>(List.of(new SpiderKing())), BOSS_ROOM));
         else
-            rooms.add(new Room(new ArrayList<>(List.of(new MegaSaurus())), 4));
+            rooms.add(new Room(new ArrayList<>(List.of(new MegaSaurus())), BOSS_ROOM));
         return rooms;
     }
 
@@ -65,6 +66,15 @@ public class Level {
      */
     public int getLevel() {
         return level;
+    }
+
+    /**
+     * This method returns the number of rooms.
+     *
+     * @return the number of rooms
+     */
+    public int getRoomCount() {
+        return BOSS_ROOM;
     }
 
 

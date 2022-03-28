@@ -19,10 +19,12 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
     private static final String QUESTION = "Pick %d card(s) as loot\n";
     private static final String MULTIPLE_ANSWER = "Enter numbers [1--%d] separated by comma:";
     private static final String SINGLE_ANSWER = "Enter number [1--%d]:";
+    private static final double DEVIDE_BY_TWO = 2;
     private final List<Card> choices;
 
     /**
      * Creates a new CardRewardRequest.
+     *
      * @param choices the list of cards that can be chosen
      */
     public CardRewardRequest(List<Card> choices) {
@@ -38,7 +40,7 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
         }
         String[] answer = input.split(",");
 
-        if (answer.length == Math.ceil(choices.size() / 2d) && !input.endsWith(",")) {
+        if (answer.length == Math.ceil(choices.size() / DEVIDE_BY_TWO) && !input.endsWith(",")) {
             if (validInput(answer)) {
                 for (String number : answer) {
                     chosenCards.add(choices.get(Integer.parseInt(number) - 1));
@@ -55,6 +57,7 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
 
     /**
      * validate Input
+     *
      * @param input input of the user
      * @return true if the input is valid
      */
@@ -78,7 +81,8 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
 
     @Override
     public String getQuestion() {
-        StringBuilder builder = new StringBuilder(String.format(QUESTION, (int) Math.ceil(choices.size() / 2d)));
+        StringBuilder builder = new StringBuilder(
+                String.format(QUESTION, (int) Math.ceil(choices.size() / DEVIDE_BY_TWO)));
         for (int i = 0; i < choices.size(); i++) {
             builder.append(String.format("%d) %s\n", i + 1, choices.get(i).toString()));
         }
@@ -87,7 +91,7 @@ public class CardRewardRequest extends InputRequest<List<Card>> {
 
     @Override
     public String getAnswer() {
-        if (choices.size() == 2)
+        if (choices.size() == DEVIDE_BY_TWO)
             return String.format(SINGLE_ANSWER, choices.size());
         return String.format(MULTIPLE_ANSWER, choices.size());
     }
